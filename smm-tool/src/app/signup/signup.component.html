@@ -1,0 +1,71 @@
+<div class="flex items-center justify-center mt-28">
+    <div class="w-96 border rounded bg-white px-7 py-10">
+      <form #signupForm="ngForm" (ngSubmit)="onSignupSubmit()">
+        <h4 class="text-2xl mb-7">Sign Up</h4>
+  
+        <!-- Name Input -->
+        <label for="name" class="input-label">Name</label>
+        <input
+          id="name"
+          type="text"
+          name="name"
+          placeholder="Name"
+          class="input-box"
+          [(ngModel)]="name"
+          #nameCtrl="ngModel"
+          required
+          minlength="2"
+        />
+        <div *ngIf="nameCtrl.invalid && nameCtrl.touched" class="text-red-500 text-sm">
+          Name is required and must be at least 2 characters.
+        </div>
+  
+        <!-- Email Input -->
+        <label for="email" class="input-label">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="Email"
+          class="input-box"
+          [(ngModel)]="email"
+          #emailCtrl="ngModel"
+          required
+        />
+        <div *ngIf="emailCtrl.invalid && emailCtrl.touched" class="text-red-500 text-sm">
+          Please enter a valid email address.
+        </div>
+  
+        <!-- Password Input -->
+        <label for="password" class="input-label">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="input-box"
+          [(ngModel)]="password"
+          #passwordCtrl="ngModel"
+          required
+          minlength="6"
+        />
+        <div *ngIf="passwordCtrl.invalid && passwordCtrl.touched" class="text-red-500 text-sm">
+          Password must be at least 6 characters.
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary w-full mt-4" [disabled]="signupForm.invalid">
+          Sign Up
+        </button>
+  
+        <!-- Link to Login -->
+        <p class="text-sm text-center mt-4">
+          Already have an account?
+          <a routerLink="/login" class="font-medium text-primary underline">
+            Log in
+          </a>
+        </p>
+      </form>
+    </div>
+  </div>
+  
