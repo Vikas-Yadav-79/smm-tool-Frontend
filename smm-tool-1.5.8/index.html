@@ -18,6 +18,27 @@
   <!-- Include Your App Files -->
   <script src="app/app.js"></script>
   <script src="app/controllers/auth.controller.js"></script>
+
+  <!-- Add this to your index.html file -->
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '480761234690688', // Replace with your app ID
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v12.0' // Use the latest version
+    });
+  };
+
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
 </head>
 <body ng-app="myApp">
   <div ng-view></div> 

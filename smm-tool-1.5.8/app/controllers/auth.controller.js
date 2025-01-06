@@ -81,5 +81,29 @@ angular.module('myApp').controller('AuthController', function($scope, $http, $lo
         localStorage.removeItem('user_id');
         localStorage.removeItem('user_email');
         $location.path('/login');
-    }
+    };
+
+    $scope.facebookLogin = function() {
+        FB.login(function(response) {
+          if (response.authResponse) {
+            // Successfully logged in, get the access token
+            var accessToken = response.authResponse.accessToken;
+    
+            // Send the access token to the backend (CodeIgniter)
+            $http.post('http://localhost/CodeIgniter-2.2.0/index.php/facebook/login', { accessToken: accessToken })
+              .then(function(response) {
+                console.log('Logged in successfully');
+                // Handle the response, such as storing the token or redirecting
+                $location.path('/dashboard');
+
+              }, function(error) {
+                console.log('Error logging in');
+              });
+          } else {
+            console.log('User cancelled login or did not fully authorize.');
+          }
+        }, { scope: 'pages_manage_posts,pages_read_engagement,publish_pages' }); // Request permissions
+      };
+
+
 });

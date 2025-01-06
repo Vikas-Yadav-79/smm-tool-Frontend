@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -170,6 +171,7 @@
             border: solid;
             border-radius: 100%;
         }
+
         .nav-links {
             list-style: none;
             display: flex;
@@ -208,58 +210,60 @@
         .profile-icon:hover span {
             color: #4a90e2;
         }
-
     </style>
 </head>
+
 <body>
 
     <div class="dashboard-container">
 
         <nav class="navbar">
             <div class="logo">
-              <img src="app/assets/images/Almalogo.png" alt="Logo" />
+                <img src="app/assets/images/Almalogo.png" alt="Logo" />
             </div>
             <ul class="nav-links">
-              <!-- <li><a href="#create">Create</a></li>
+                <!-- <li><a href="#create">Create</a></li>
               <li><a href="#publish">Publish</a></li>
               <li><a href="#analyse">Analyse</a></li>
               <li><a href="#profile">Profile</a></li> -->
-              <li>
-                <div class="profile-icon" >
-                    <img src="https://via.placeholder.com/40" alt="Profile">
-                </div>
-            </li>
-            
+                <li>
+                    <div class="profile-icon">
+                        <img src="https://via.placeholder.com/40" alt="Profile">
+                    </div>
+                </li>
+
 
             </ul>
         </nav>
 
         <div class="sidebar">
             <div class="header">
-              <span class="title">All Channels</span>
-              <button class="add-btn">+</button>
+                <span class="title">All Channels</span>
+                <button class="add-btn">+</button>
             </div>
-          
+
             <ul class="channels">
-              <li class="channel-item">
-                <i class="fab fa-facebook-f"></i> Connect Facebook
-              </li>
-              <li class="channel-item">
-                <i class="fab fa-instagram"></i> Connect Instagram
-              </li>
-              <li class="channel-item">
-                <i class="fab fa-linkedin-in"></i> Connect LinkedIn
-              </li>
-              <li class="channel-item">
-                <i class="fas fa-comments"></i> Connect Threads
-              </li>
-              <li class="channel-item">
-                <i class="fas fa-chevron-down"></i> Show more channels
-              </li>
+                <li class="channel-item">
+                    <button style="border: hidden; background-color: #f9f9f9;" ng-click="facebookLogin()">
+                        <i class="fab fa-facebook-f"></i> Connect Facebook
+                    </button>
+                </li>
+                <li class="channel-item">
+                    <i class="fab fa-instagram"></i> Connect Instagram
+                </li>
+                <li class="channel-item">
+                    <i class="fab fa-linkedin-in"></i> Connect LinkedIn
+                </li>
+                <li class="channel-item">
+                    <i class="fas fa-comments"></i> Connect Threads
+                </li>
+                <li class="channel-item">
+                    <i class="fas fa-chevron-down"></i> Show more channels
+                </li>
             </ul>
         </div>
 
-       
+
     </div>
     <script>
         console.log(loginData.email);
