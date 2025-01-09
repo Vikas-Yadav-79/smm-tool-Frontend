@@ -1,16 +1,22 @@
 <div class="dashboard-container">
-  <sidebar></sidebar>
+  <sidebar on-connect="connectHendal()" handel="handel"></sidebar>
   <div style="width: -webkit-fill-available">
     <subnavbar
-      data="$ctrl.selectedTable"
-      on-action="$ctrl.changeTabledata(type)"
-      on-apply-filter="$ctrl.onApplyFilter(filters)"
+      data="selectedTable"
+      on-action="changeTabledata()"
+      on-apply-filter="onApplyFilter()"
+      filter="filter"
     ></subnavbar>
 
-    <table
-      ng-if="flag"
-      items="items"
-      on-action="$ctrl.handleTableAction(action, item)"
-    ></table>
+    <table ng-if="flag" items="items"></table>
   </div>
+  <dialog class="mdl-dialog dialog-analyze">
+    <comment ng-if="selectedItem" data="selectedItem"></comment>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button" ng-click="closeDialog()">
+        Close
+      </button>
+    </div>
+  </dialog>
 </div>
+<a href=""></a>

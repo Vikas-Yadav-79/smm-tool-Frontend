@@ -5,40 +5,39 @@ angular.module('subnavbar').component('subnavbar', {
   bindings: {
     onAction: '&',
     onApplyFilter: '&',
-    data: '<'
+    data: '=',
+    filter: '='
   },
 
   controller: function ($scope) {
-    $scope.activeButton = 'Published';
-    $scope.filter = {
-      min: 0,
-      max: 70,
-      selectedOption: "",
-      selectedType: "All",
-      startDate: "",
-      endDate: "",
-
-    };
+    $scope.activeButton = this.data;
+    $scope.filter = this.filter;
 
     this.setActiveButton = function (type) {
+      $scope.activeButton = type;
+      this.data = type;
       if (this.onAction) {
-        this.activeButton = type;
-        this.onAction({ type });
+        this.onAction();
       }
     };
-    this.applyFilter = function () {
-      console.log($scope.endDate);
+
+    $scope.show = function () {
+      let v = "filter";
+      const item = document.getElementById(v);
+      if (item.classList.contains("hide")) {
+        document.getElementById(v).classList.remove("hide");
+        document.getElementById(v).classList.add("active");
+      } else {
+        document.getElementById(v).classList.remove("active");
+        document.getElementById(v).classList.add("hide");
+      }
+
+    }
+    this.applyFilter = () => {
+      this.filter = $scope.filter;
       if (this.onApplyFilter) {
-        this.onApplyFilter({
-          filters: {
-            min: $scope.min,
-            max: $scope.max,
-            selectedOption: $scope.selectedOption,
-            selectedType: $scope.selectedType,
-            startDate: $scope.startDate,
-            endDate: $scope.endDate,
-          },
-        });
+        this.onApplyFilter();
+        $scope.show();
       }
     }
   }

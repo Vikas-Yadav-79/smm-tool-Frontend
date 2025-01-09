@@ -578,7 +578,7 @@ input[type="range"] {
   outline: none;
   position: absolute;
   margin: auto;
-  top: 0;
+  top: 50px;
   bottom: 0;
   background-color: transparent;
   pointer-events: none;
@@ -590,7 +590,7 @@ input[type="range"] {
   position: absolute;
   margin: auto;
   background-color: #555;
-  top: 0;
+  top: 50px;
   bottom: 0;
   border-radius: 5px;
 }
@@ -764,4 +764,20 @@ select {
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: fit-content;
+}
+
+.filter-dropbox {
+  padding: 10px;
+  top: 62px;
+  position: absolute;
+  z-index: 10;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  height: fit-content;
+}
+
+.filter-li {
+  padding: 5px;
 }

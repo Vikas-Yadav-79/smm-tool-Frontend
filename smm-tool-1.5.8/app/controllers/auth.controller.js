@@ -106,14 +106,13 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     };
 
 
-    const ctrl = this;
 
     // ohm's sidebar implementation
     $scope.items = [];
     $scope.selectedItem = "";
     $scope.authUrl = "https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=1382135032788086&redirect_uri=https://localhost/codeigniter/index.php/instagram/login&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish";
     $scope.flag = false;
-    $http.get("http://localhost/codeigniter/index.php/instagram/replay")
+    $http.get("http://localhost/codeigniter/index.php/instagram/getpost")
         .then(function (response) {
             $scope.data = response.data;
             $scope.flag = true;
@@ -122,22 +121,39 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         .catch(function (error) {
             console.error("Error fetching Instagram login URL:", error);
         });
-    this.filteredItems = [...$scope.items];
+    $scope.filteredItems = [...$scope.items];
+    $scope.filter = {
+        min: 0,
+        max: 70,
+        selectedOption: "",
+        selectedType: "All",
+        startDate: "",
+        endDate: "",
 
-    this.onApplyFilter = function (filters) {
-        console.log('Filters applied:', filters);
+    };
+    $scope.handel = "";
 
-        const { min, max, selectedOption, selectedType, startDate, endDate } = filters;
+    $scope.connectHendal = function () {
 
+        if ($scope.handel === 'Facebook') {
+
+        } else if ($scope.handel === 'Instagram') {
+
+        } else if ($scope.handel === 'Linkedin') {
+
+        }
+    }
+    $scope.onApplyFilter = function () {
+        const { min, max, selectedOption, selectedType, startDate, endDate } = $scope.filter;
         if (selectedType !== 'All') {
             console.log('Selected type:', selectedType);
-            this.filteredItems = this.filteredItems.filter((item) => {
+            $scope.filteredItems = $scope.filteredItems.filter((item) => {
                 const matchesType = selectedType === 'All' || item.type === selectedType;
                 return matchesType;
             });
         }
         if (startDate !== "" && endDate !== "") {
-            this.filteredItems = this.filteredItems.filter((item) => {
+            $scope.filteredItems = $scope.filteredItems.filter((item) => {
                 const itemDate = new Date(item.time);
                 const withinDateRange =
                     (!startDate || itemDate >= new Date(startDate)) &&
@@ -146,38 +162,39 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
             });
         }
         if (selectedOption === 'asc') {
-            this.filteredItems.sort((a, b) => new Date(a.time) - new Date(b.time));
+            $scope.filteredItems.sort((a, b) => new Date(a.time) - new Date(b.time));
         } else if (selectedOption === 'desc') {
-            this.filteredItems.sort((a, b) => new Date(b.time) - new Date(a.time));
+            $scope.filteredItems.sort((a, b) => new Date(b.time) - new Date(a.time));
         }
-        console.log(this.filteredItems);
-        this.items = this.filteredItems;
+        console.log($scope.filteredItems);
+        $scope.items = $scope.filteredItems;
     };
-    this.selectedTable = 'Scheduled';
+    $scope.selectedTable = 'Scheduled';
 
-    this.changeTabledata = function (type) {
-        if (type === 'Published') {
-            this.selectedTable = 'Published';
+
+    $scope.changeTabledata = function () {
+        if ($scope.selectedTable === 'Published') {
+            $scope.selectedTable = 'Published';
             console.log('Published');
-        } else if (type === 'Scheduled') {
-            this.selectedTable = 'Scheduled';
+        } else if ($scope.selectedTable === 'Scheduled') {
+            $scope.selectedTable = 'Scheduled';
             console.log('Scheduled');
-        } else if (type === 'Drafted') {
-            this.selectedTable = 'Drafted';
+        } else if ($scope.selectedTable === 'Drafted') {
+            $scope.selectedTable = 'Drafted';
             console.log('Drafted');
         }
     }
-    this.handleTableAction = function (action, item) {
-        if (action === 'edit') {
-            alert(`Editing item: ${item.serialNo}`);
-        } else if (action === 'analyze') {
+    $scope.$on('childAction', function (event, data) {
+        if (data.action === 'edit') {
+            alert(`Editing item: ${data.item.serialNo}`);
+        } else if (data.action === 'analyze') {
             var dialog = document.querySelector('dialog');
-            $scope.selectedItem = item;
+            $scope.selectedItem = data.item;
             dialog.showModal();
-        } else if (action === 'delete') {
-            alert(`Deleting item: ${item.serialNo}`);
+        } else if (data.action === 'delete') {
+            alert(`Deleting item: ${data.item.serialNo}`);
         }
-    };
+    });
     $scope.closeDialog = function closeDialog() {
         var dialog = document.querySelector('dialog');
         $scope.selectedItem = null;

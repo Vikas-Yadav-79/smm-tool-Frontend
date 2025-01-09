@@ -4,7 +4,6 @@ angular.module('table').component('table', {
   templateUrl: '/app/components/table/table.html',
   bindings: {
     items: '<', // Input data passed to the table
-    onAction: '&', // Callback for actions on items
   },
   controller: function ($rootScope, $scope, $timeout) {
 
@@ -22,9 +21,8 @@ angular.module('table').component('table', {
     }
 
     $scope.handleAction = function (action, item) {
-      if (this.onAction) {
-        this.onAction({ action, item });
-      }
+      $scope.show(item.id);
+      $scope.$emit('childAction', { action, item });
     };
   },
 });

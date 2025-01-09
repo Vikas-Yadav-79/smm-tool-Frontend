@@ -3,7 +3,7 @@
     <ul class="sel">
       <li class="sel-item">
         <button
-          ng-class="{selected: $ctrl.activeButton === 'Scheduled'}"
+          ng-class="{selected: activeButton === 'Scheduled'}"
           ng-click="$ctrl.setActiveButton('Scheduled')"
         >
           Scheduled
@@ -11,7 +11,7 @@
       </li>
       <li class="sel-item">
         <button
-          ng-class="{selected: $ctrl.activeButton === 'Published'}"
+          ng-class="{selected: activeButton === 'Published'}"
           ng-click="$ctrl.setActiveButton('Published')"
         >
           Published
@@ -19,7 +19,7 @@
       </li>
       <li class="sel-item">
         <button
-          ng-class="{selected: $ctrl.activeButton === 'Drafted'}"
+          ng-class="{selected: activeButton === 'Drafted'}"
           ng-click="$ctrl.setActiveButton('Drafted')"
         >
           Drafted
@@ -50,6 +50,110 @@
       </li>
       <li class="sel-item" style="place-items: center">
         <button
+          ng-click="show()"
+          class="mdl-button mdl-js-button mdl-button--icon"
+        >
+          <i class="material-icons">more_vert</i>
+        </button>
+        <div class="hide filter-dropbox" id="filter">
+          <ul for="demo-menu-lower-right">
+            <li
+              class="filter-li"
+              style="display: flex; justify-content: space-between"
+            >
+              <label for="postType">Post Type:</label>
+              <select
+                id="postType"
+                class="filter-input"
+                ng-model="filter.selectedType"
+                onclick="event.stopPropagation()"
+              >
+                <option value="all">All</option>
+                <option value="text">Text</option>
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+                <option value="link">Link</option>
+              </select>
+            </li>
+            <li
+              class="filter-li"
+              ng-if="activeButton != 'Scheduled' && activeButton != 'Drafted'"
+            >
+              <label for="startDate">Date Range:</label>
+              <input
+                type="date"
+                id="startDate"
+                class="filter-input"
+                ng-model="filter.startDate"
+                onclick="event.stopPropagation()"
+              />
+              <input
+                type="date"
+                id="endDate"
+                class="filter-input"
+                ng-model="filter.endDate
+                "
+                onclick="event.stopPropagation()"
+              />
+            </li>
+            <li
+              class="filter-li"
+              style="display: flex; justify-content: space-between"
+            >
+              <label for="timeSort">Sort by Time:</label>
+              <select
+                id="timeSort"
+                class="filter-input"
+                ng-model="filter.selectedOption"
+                onclick="event.stopPropagation()"
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </li>
+            <li
+              class="filter-li"
+              style="height: 60px"
+              ng-if="activeButton != 'Scheduled' && activeButton != 'Drafted'"
+            >
+              <div>
+                <p style="margin: -6px; margin-left: 1px">
+                  Likes range :-
+                  <span id="slider-1-value">{{filter.min}}</span> -
+                  <span id="slider-1-value">{{filter.max}}</span>
+                </p>
+              </div>
+              <div>
+                <div class="slider-track"></div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  ng-model="filter.min"
+                  id="slider-1"
+                  onclick="event.stopPropagation()"
+                />
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  ng-model="filter.max"
+                  id="slider-2"
+                  onclick="event.stopPropagation()"
+                />
+              </div>
+            </li>
+            <li class="filter-li">
+              <button
+                style="font: caption; padding: 10px; border: groove"
+                ng-click="$ctrl.applyFilter()"
+              >
+                Apply
+              </button>
+            </li>
+          </ul>
+        </div>
+        <!-- <button
           id="demo-menu-lower-right"
           ng-if="$ctrl.data != 'Drafted'"
           class="mdl-button mdl-js-button mdl-button--icon"
@@ -88,7 +192,7 @@
                 type="date"
                 id="startDate"
                 class="filter-input"
-                ng-model="filter.startDate"
+                ng-model="startDate"
                 onclick="event.stopPropagation()"
               />
               <input
@@ -108,7 +212,7 @@
               <select
                 id="timeSort"
                 class="filter-input"
-                ng-model="selectedOption"
+                ng-model="filter.selectedOption"
                 onclick="event.stopPropagation()"
               >
                 <option value="asc">Ascending</option>
@@ -156,7 +260,7 @@
               </button>
             </li>
           </ul>
-        </div>
+        </div> -->
       </li>
     </ul>
   </div>
