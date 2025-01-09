@@ -1,0 +1,46 @@
+/* Center the form container */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #f5f5f5; /* Light background for contrast */
+  }
+  
+  /* Styles for signup form */
+  .signup-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .mdl-card__title {
+    color: white;
+    background-color: indigo;
+    padding: 16px;
+    text-align: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .mdl-card__supporting-text {
+    padding: 16px;
+  }
+  
+  .mdl-textfield {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .button {
+    text-align: right;
+  }
+  
+  .login-link {
+    text-align: center;
+    margin-top: 16px;
+  }
+  
