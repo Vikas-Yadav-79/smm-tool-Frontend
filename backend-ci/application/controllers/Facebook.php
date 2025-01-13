@@ -14,6 +14,7 @@ class Facebook extends CI_Controller {
         $this->load->helper('url');
         $this->load->library('session');
         $this->access_token = $this->session->userdata('accessToken');
+        
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');  // Allow all origins
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE','OPTIONS');  // Allow these methods
@@ -56,8 +57,6 @@ class Facebook extends CI_Controller {
         }
     }
 
-
-
     public function getLongTermAccessToken() {
         $appId = '480761234690688';  // Your Facebook App ID
         $appSecret = '14a6fe0369f8c0ef1012f48563db2d57';  // Your Facebook App Secret
@@ -84,6 +83,9 @@ class Facebook extends CI_Controller {
             // Decode the response
             $responseData = json_decode($response, true);
     
+            error_log("Facebook API Response: " . print_r($responseData, true));
+            var_dump($responseData);
+
             // Check if the response contains the long-term token
             if ($httpCode === 200 && isset($responseData['access_token'])) {
                 // Return the long-term access token as JSON response
@@ -117,6 +119,8 @@ class Facebook extends CI_Controller {
             ]);
         }
     }
+
+
 
     private function make_api_request($url) {
         $ch = curl_init($url);
@@ -194,15 +198,13 @@ class Facebook extends CI_Controller {
         // Example: Get user details
         echo json_encode($userData);
     }
-
-
     public function postMessage() {
         // Get the request payload
         $inputData = json_decode(file_get_contents('php://input'), true);
 
         // Extract the data
         $pageId = '554959331025659';
-        $accessToken =$this->session->userdata('facebook_Page_access_token');;
+        $accessToken =$this->session->userdata('facebook_Page_access_token');
         $postData = $inputData['postData'];
 
         // Facebook Graph API URL for posting to a page
@@ -222,6 +224,7 @@ class Facebook extends CI_Controller {
             } elseif ($postData['mediaType'] === 'video') {
                 $facebookGraphUrl = "https://graph.facebook.com/v16.0/$pageId/videos";
                 $data['file_url'] = $postData['mediaUrl'];
+                $data['description'] = $postData['message'];
             }
         }
 
@@ -318,6 +321,94 @@ class Facebook extends CI_Controller {
         ]);
     }
     }
+    public function postMessage1() {
+        $inputData = json_decode(file_get_contents('php://input'), true);
+    
+        $pageId = '554959331025659';
+        $accessToken = $this->session->userdata('facebook_Page_access_token');
+        $postData = $inputData['postData'];
+    
+        $facebookGraphUrl = "https://graph.facebook.com/v16.0/$pageId/feed";
+    
+        $data = [
+            'message' => $postData['message'],
+            'access_token' => $accessToken,
+        ];
+    
+        // If media is included
+        if (!empty($postData['mediaType']) && !empty($postData['mediaUrls'])) {
+            if ($postData['mediaType'] === 'image') {
+                $attachedMedia = [];
+                foreach ($postData['mediaUrls'] as $imageUrl) {
+                    // Upload each image as unpublished
+                    $uploadData = [
+                        'url' => $imageUrl,
+                        'published' => false,
+                        'access_token' => $accessToken,
+                    ];
+    
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, "https://graph.facebook.com/v16.0/$pageId/photos");
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($uploadData));
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+                    $response = curl_exec($ch);
+                    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    curl_close($ch);
+    
+                    $responseData = json_decode($response, true);
+    
+                    if ($httpCode === 200 && isset($responseData['id'])) {
+                        // Add the uploaded image ID to the attached_media array
+                        $attachedMedia[] = [
+                            'media_fbid' => $responseData['id'],
+                        ];
+                    } else {
+                        // Handle upload error
+                        echo json_encode([
+                            'status' => 'error',
+                            'response' => $responseData,
+                        ]);
+                        return;
+                    }
+                }
+    
+                // Add attached_media to the post data
+                if (!empty($attachedMedia)) {
+                    $data['attached_media'] = json_encode($attachedMedia);
+                }
+            }
+        }
+    
+        // Make the HTTP POST request to create the post
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $facebookGraphUrl);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    
+        $responseData = json_decode($response, true);
+    
+        // Send the response back to the frontend
+        if ($httpCode === 200 && isset($responseData['id'])) {
+            echo json_encode([
+                'status' => 'success',
+                'response' => $responseData,
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'response' => $responseData,
+            ]);
+        }
+    }
+    
+    
 
 
     public function getPostLikes() {
@@ -366,90 +457,30 @@ class Facebook extends CI_Controller {
 
  
     
-        public function replyToComment() {
+    public function replyToComment() {
+        // Get the JSON input data from Postman (comment ID, message, access token)
+        $input_data = json_decode(file_get_contents('php://input'), true);
 
-            $inputData = json_decode(file_get_contents('php://input'), true);
+        // Get the access token, comment ID, and reply message from the request
+        $access_token = $this->session->userdata('facebook_Page_access_token');;
+        $comment_id = $input_data['comment_id']; // The ID of the comment you're replying to
+        $message = $input_data['message']; // The message you want to reply with
 
-            $comment_id = $inputData['comment_id'];
-            $content = $inputData['content'];
-            $access_token = $this->session->userdata('facebook_Page_access_token'); // Facebook access token from session
+        // Construct the URL to reply to the comment
+        $url = "https://graph.facebook.com/v12.0/{$comment_id}/comments?message=" . urlencode($message) . "&access_token={$access_token}";
 
-            $userId = $this->session->userdata('user_id');
+        // Initialize CURL to send the request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-            $this->db->select('id');
-            $this->db->from('social_accounts');
-            $this->db->where('user_id', $userId);
-            $this->db->where('platform', 'Facebook');
-            $query = $this->db->get();
-            $social_account_id = $query->row()->id; // Fetch the social account ID
-    
-        // Get the post ID from the database
-            $this->db->select('id');
-            $this->db->from('posts');
-            $this->db->where('platform_post_ids', $postId); // Assuming $postId is the correct post identifier
-            $query = $this->db->get();
-            $postDbId = $query->row()->id;
-
-            $this->db->select('id');
-            $this->db->from('comments');
-            $this->db->where('comment_id', $comment_id); // Assuming $postId is the correct post identifier
-            $query = $this->db->get();
-            $comment_id = $query->row()->id;
-    
-            // Prepare the data for the Facebook Graph API request
-            $facebookGraphUrl = "https://graph.facebook.com/v21.0/{$comment_id}/comments?access_token=$accessToken";
-            $data = array(
-                'message' => $content,
-                'access_token' => $access_token
-            );
-    
-            // Initialize cURL for the Facebook API request
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $facebookGraphUrl);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    
-            // Execute the request and get the response
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-    
-            // Decode the response from Facebook API
-            $responseData = json_decode($response, true);
-    
-            // Check if the request was successful
-            if ($httpCode === 200 && isset($responseData['id'])) {
-                // Insert the reply into the local database
-
-                $reply_id = $responseData['id'];
-                $dbData = array(
-                    'user_id' => $user_id,
-                    'social_account_id' => $social_account_id,
-                    'comment_id' => $comment_id,
-                    'reply_id' => $reply_id,
-                    'content' => $content,
-                    'created_at' => date('Y-m-d H:i:s')
-                );
-    
-                // Insert the reply into the database
-                $this->db->insert('replies', $dbData);
-    
-                // Return success response
-                $response = array(
-                    'status' => 'success',
-                    'message' => 'Reply added successfully',
-                    'reply_id' => $this->db->insert_id(),
-                    'facebook_reply_id' => $responseData['id'] // Return the Facebook reply ID
-                );
-            } else {
-                // Return error response if Facebook API fails
-                $response = array('status' => 'error', 'message' => 'Failed to post reply to Facebook', 'error' => $responseData);
-            }
-    
-            // Output the response in JSON format
-            echo json_encode($response);
-        }
+        // Output the response from Facebook
+        echo $response;
+    }
 
 
 
@@ -567,7 +598,7 @@ class Facebook extends CI_Controller {
         $postId = $inputData['postId'];
         $accessToken = $this->session->userdata('facebook_Page_access_token');
         $commentContent = $inputData['commentContent'];
-    
+        
         // Get the user ID from the session
         $userId = $this->session->userdata('user_id');
     
