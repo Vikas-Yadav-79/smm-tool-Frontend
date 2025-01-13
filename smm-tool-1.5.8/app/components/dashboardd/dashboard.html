@@ -241,6 +241,17 @@
                 <span class="title">All Channels</span>
                 <button class="add-btn">+</button>
             </div>
+            <div >
+                <p>Your Social Media Accounts</p>
+                <div ng-if="socialAccounts.length > 0">
+                    <ul style ="list-style-type: none; padding: 0;">
+                        <li ng-repeat="account in socialAccounts" style="padding: 10px; cursor: pointer; transition: background-color 0.3s;">
+                            <b>{{ account.account_name }}</b> ({{ account.platform }})
+                            <!-- You can also display other details like access_token or other info -->
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
             <ul class="channels">
                 <li class="channel-item">
