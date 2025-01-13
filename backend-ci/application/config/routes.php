@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -40,6 +40,7 @@
 
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
 
 $route['register'] = 'auth/register';
 $route['login'] = 'auth/login';
@@ -68,8 +69,21 @@ $route['facebook/updatePost'] = 'facebook/updatePost';
 
 
 
+// instagram all routes here 
+
+$route['instagram/post'] = "api_controller/post";
+$route['instagram/getlikes/(:any)'] = "api_controller/getlikes/$1";
+$route['instagram/comments/(:any)'] = "api_controller/comments/$1";
+$route['instagram/replay'] = "api_controller/replay";
+$route['instagram/getpost'] = "api_controller/getpost";
+$route['instagram/login_dilog'] = "api_controller/loginDilogbox";
 
 
+$route['instagram/login'] = "api_controller/login";
+$route['instagram/callback'] = "api_controller/callback";
+
+
+$route['posts/getposts'] = "post/getposts";
 
 
 // Route to get likes and reactions for a post

@@ -6,7 +6,7 @@ angular.module('table').component('table', {
     items: '<', // Input data passed to the table
   },
   controller: function ($rootScope, $scope, $timeout) {
-
+    $scope.items = this.items;
     $scope.show = function (id) {
       let v = "id-" + id;
       const item = document.getElementById(v);

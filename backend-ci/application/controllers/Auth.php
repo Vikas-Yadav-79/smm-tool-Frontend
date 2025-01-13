@@ -1,49 +1,60 @@
 <?php
 class Auth extends CI_Controller
- {
-    public function __construct() {
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('User_model');
         $this->load->library('session');
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');  // Allow all origins
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');  // Allow these methods
-        header('Access-Control-Allow-Headers: Content-Type, Authorization'); 
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
     }
 
-    public function register() {
+    public function register()
+    {
         $data = json_decode(file_get_contents('php://input'), true);
         $plainPassword = $data['password'];
         $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
-        
+
         if ($this->User_model->register($data)) {
             // Try to log the user in after registration
             $user = $this->User_model->login($data['email'], $plainPassword);
-            
+
             if ($user) {
                 // Set session data if login is successful
                 $this->session->set_userdata('user_id', $user->id);
                 $this->session->set_userdata('email', $user->email);
-                echo json_encode(['status' => 'success', 'message' => 'User registered','user' => $user]);
+                echo json_encode(['status' => 'success', 'message' => 'User registered', 'user' => $user]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Login failed after registration']);
             }
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Registration failed']);    
+            echo json_encode(['status' => 'error', 'message' => 'Registration failed']);
         }
     }
-    
 
-    
 
-    public function login() {
-    
+
+
+    public function login()
+    {
+
         $data = json_decode(file_get_contents('php://input'), true);
         // var_dump($data);die();   
         $user = $this->User_model->login($data['email'], $data['password']);
         if ($user) {
             $this->session->set_userdata('user_id', $user->id);
-           $this->session->set_userdata('user_email', $user->email);
+            $this->session->set_userdata('user_email', $user->email);
+            $this->db->where('user_id', $user->id);
+            $query = $this->db->get('social_accounts');
+            $result = $query->result_array();
+            if (count($result) !== 0) {
+                foreach ($result as $row) {
+                    $this->session->set_userdata($row['platform'] . '_accessToken', $row['access_token']);
+                }
+            }
             echo json_encode(['status' => 'success', 'user' => $user]);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Invalid credentials']);
@@ -69,14 +80,16 @@ class Auth extends CI_Controller
     //         exit;  // Stop further execution
     //     }
     // }
-    
-    public function logout() {
+
+    public function logout()
+    {
         $this->session->sess_destroy();  // Destroy the session
         echo json_encode(['status' => 'success', 'message' => 'Logged out successfully']);
     }
-    
 
-    public function update() {
+
+    public function update()
+    {
         // $this->is_logged_in();
 
         $data = json_decode(file_get_contents('php://input'), true);
@@ -89,4 +102,3 @@ class Auth extends CI_Controller
         }
     }
 }
-

@@ -8,7 +8,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     $scope.register = function () {
         if ($scope.registerForm.$valid) {
             console.log('Registering with:', $scope.registerData);
-            $http.post('http://localhost/CodeIgniter-2.2.0/index.php/register', $scope.registerData)
+            $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/register', $scope.registerData)
                 .then(function (response) {
                     if (response.data.status === 'success') {
                         alert('Registration successful');
@@ -30,7 +30,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     $scope.login = function () {
         if ($scope.loginForm.$valid) {
             console.log('Logging in with:', $scope.loginData);
-            $http.post('http://localhost/CodeIgniter-2.2.0/index.php/login', $scope.loginData)
+            $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/login', $scope.loginData)
                 .then(function (response) {
                     if (response.data.status === 'success') {
                         alert('Login successful');
@@ -58,7 +58,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
             //     $scope.updateData.password = ;
 
             // }
-            $http.put('http://localhost/CodeIgniter-2.2.0/index.php/update', $scope.updateData)
+            $http.put('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/update', $scope.updateData)
                 .then(function (response) {
                     if (response.data.status === 'success') {
                         alert('User updated successfully');
@@ -90,7 +90,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
                 var accessToken = response.authResponse.accessToken;
 
                 // Send the access token to the backend (CodeIgniter)
-                $http.post('http://localhost/CodeIgniter-2.2.0/index.php/facebook/login', { accessToken: accessToken })
+                $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/facebook/login', { accessToken: accessToken })
                     .then(function (response) {
                         console.log('Logged in successfully');
                         // Handle the response, such as storing the token or redirecting
@@ -109,18 +109,22 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
 
     // ohm's sidebar implementation
     $scope.items = [];
-    $scope.selectedItem = "";
+    $scope.selectedItem = "Scheduled";
     $scope.authUrl = "https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=1382135032788086&redirect_uri=https://localhost/codeigniter/index.php/instagram/login&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish";
     $scope.flag = false;
-    $http.get("http://localhost/codeigniter/index.php/instagram/getpost")
+    $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/posts/getposts")
         .then(function (response) {
             $scope.data = response.data;
             $scope.flag = true;
             $scope.items = $scope.data;
+            /// to add filter of facebook instagram etc
         })
         .catch(function (error) {
             console.error("Error fetching Instagram login URL:", error);
         });
+    if ($scope.flag) {
+        console.log($scope.item);
+    }
     $scope.filteredItems = [...$scope.items];
     $scope.filter = {
         min: 0,
@@ -131,15 +135,19 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         endDate: "",
 
     };
-    $scope.handel = "";
 
-    $scope.connectHendal = function () {
+    $scope.connectHendal = function (action) {
 
-        if ($scope.handel === 'Facebook') {
+        if (action === 'Facebook') {
 
-        } else if ($scope.handel === 'Instagram') {
-
-        } else if ($scope.handel === 'Linkedin') {
+        } else if (action === 'Instagram') {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/login_dilog';
+            form.style.display = 'none';
+            document.body.appendChild(form);
+            form.submit();
+        } else if (action === 'Linkedin') {
 
         }
     }
