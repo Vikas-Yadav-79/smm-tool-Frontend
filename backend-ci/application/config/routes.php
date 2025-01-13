@@ -55,7 +55,7 @@ $route['facebook/postMessage'] = 'facebook/postMessage';
 
 $route['facebook/getPostLikes'] = 'facebook/getPostLikes';
 
-
+$route['facebook/getLongTermAccessToken'] = 'facebook/getLongTermAccessToken';
 
 $route['facebook/getPostComments'] = 'facebook/getPostComments';
 
@@ -64,6 +64,17 @@ $route['facebook/postComment'] = 'facebook/postComment';
 
 
 $route['facebook/updatePost'] = 'facebook/updatePost';
+
+
+$route['facebook/replyToComment'] = 'facebook/replyToComment';
+
+$route['facebook/getAllFacebookPosts'] = 'facebook/getAllFacebookPosts';
+
+
+$route['facebook/getSocialMediaAccounts'] = 'facebook/getSocialMediaAccounts';
+
+
+
 
 
 
