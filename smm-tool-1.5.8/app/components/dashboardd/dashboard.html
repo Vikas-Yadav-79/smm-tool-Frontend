@@ -3,12 +3,20 @@
   <div style="width: -webkit-fill-available">
     <subnavbar
       data="selectedTable"
-      on-action="changeTabledata()"
+      on-action="changeTabledata(type)"
       on-apply-filter="onApplyFilter()"
       filter="filter"
-    ></subnavbar>
-
-    <table ng-if="flag" items="items"></table>
+      on-search="filterData(query)"
+      on-rest="restTable()"
+    >
+      ></subnavbar
+    >
+    <table2
+      ng-if="flag"
+      data="selectedTable"
+      count="tableLength"
+      items="items"
+    ></table2>
   </div>
   <dialog class="mdl-dialog dialog-analyze">
     <comment ng-if="selectedItem" data="selectedItem"></comment>

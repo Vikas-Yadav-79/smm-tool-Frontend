@@ -5,7 +5,6 @@ class Auth extends CI_Controller
     {
         parent::__construct();
         $this->load->model('User_model');
-        $this->load->library('session');
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');  // Allow all origins
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');  // Allow these methods
@@ -52,7 +51,9 @@ class Auth extends CI_Controller
             $result = $query->result_array();
             if (count($result) !== 0) {
                 foreach ($result as $row) {
-                    $this->session->set_userdata($row['platform'] . '_accessToken', $row['access_token']);
+                    if (isset($row['access_token'])) {
+                        $this->session->set_userdata($row['platform'] . '_accessToken', $row['access_token']);
+                    }
                 }
             }
             echo json_encode(['status' => 'success', 'user' => $user]);

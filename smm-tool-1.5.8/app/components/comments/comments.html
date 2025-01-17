@@ -8,7 +8,7 @@
         alt="Post Image"
       />
     </div>
-    <h3>{{$ctrl.data.caption}}</h3>
+    <h3>{{$ctrl.data.content}}</h3>
     <div class="analytics-details">
       <p><strong>Likes:</strong> {{likes}}</p>
       <p><strong>Comments:</strong> {{$ctrl.analytics.comments.length}}</p>
@@ -16,24 +16,33 @@
   </div>
 
   <div class="comments-section">
-    <h3>Comments</h3>
+    <h3 class="comments-title">Comments</h3>
     <div class="comment" ng-repeat="comment in $ctrl.analytics.comments">
       <div class="comment-content">
-        <p><strong>{{comment.author}}:</strong> {{comment.text}}</p>
+        <p>
+          <strong class="author">{{comment.author}}:</strong>
+          <span class="text">{{comment.text}}</span>
+        </p>
       </div>
       <div class="reply-section">
         <input
           type="text"
+          class="reply-input"
           ng-model="comment.replyText"
           placeholder="Write a reply..."
         />
-        <button ng-click="$ctrl.replyToComment(comment)">Reply</button>
+        <button class="reply-button" ng-click="$ctrl.replyToComment(comment)">
+          Reply
+        </button>
       </div>
       <div class="replies" ng-if="comment.replies.length > 0">
-        <h4>Replies</h4>
-        <ul>
-          <li ng-repeat="reply in comment.replies">
-            <p><strong>{{reply.author}}:</strong> {{reply.text}}</p>
+        <h4 class="replies-title">Replies</h4>
+        <ul class="replies-list">
+          <li class="reply" ng-repeat="reply in comment.replies">
+            <p>
+              <strong class="reply-author">{{reply.author}}:</strong>
+              <span class="reply-text">{{reply.text}}</span>
+            </p>
           </li>
         </ul>
       </div>

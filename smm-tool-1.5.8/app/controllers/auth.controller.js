@@ -1,6 +1,4 @@
 angular.module('myApp').controller('AuthController', function ($scope, $http, $location) {
-    console.log('AuthController is loaded');
-
     $scope.registerData = { email: '', password: '', username: '' };
     $scope.loginData = { email: '', password: '' };
     $scope.updateData = { id: localStorage.getItem('user_id'), email: '', password: '', username: '' };
@@ -49,7 +47,6 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
             alert('Login form is invalid');
         }
     };
-
     // Update user function
     $scope.update = function () {
         if ($scope.updateForm.$valid) {
@@ -109,23 +106,30 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
 
     // ohm's sidebar implementation
     $scope.items = [];
+    $scope.data = [];
     $scope.selectedItem = "Scheduled";
-    $scope.authUrl = "https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=1382135032788086&redirect_uri=https://localhost/codeigniter/index.php/instagram/login&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish";
     $scope.flag = false;
-    $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/posts/getposts")
+    $scope.user_id = localStorage.getItem('user_id');
+    $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/posts/getposts/" + $scope.user_id)
         .then(function (response) {
             $scope.data = response.data;
             $scope.flag = true;
             $scope.items = $scope.data;
+            console.log(response.data);
             /// to add filter of facebook instagram etc
+
+
+
+            // filter to inistial selected item 
+            $scope.items = $scope.items.filter((item) => item.status === 'scheduled');
+            $scope.tableLength = Math.ceil($scope.items.length / 4);
         })
         .catch(function (error) {
             console.error("Error fetching Instagram login URL:", error);
         });
-    if ($scope.flag) {
-        console.log($scope.item);
-    }
+
     $scope.filteredItems = [...$scope.items];
+    $scope.filteredSearch = [...$scope.items];
     $scope.filter = {
         min: 0,
         max: 70,
@@ -134,6 +138,19 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         startDate: "",
         endDate: "",
 
+    };
+
+    $scope.filterData = (query) => {
+        console.log(query);
+        const searchQuery = query.toString().toLowerCase();
+        console.log(searchQuery);
+        $scope.filteredData = $scope.items.filter(item => {
+            const content = item.content ? item.content.toString().toLowerCase() : '';
+            return content.includes(searchQuery);
+        });
+        console.log($scope.$filteredData);
+        $scope.items = $scope.filteredData;
+        $scope.tableLength = Math.ceil($scope.items.length / 4);
     };
 
     $scope.connectHendal = function (action) {
@@ -179,19 +196,25 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     };
     $scope.selectedTable = 'Scheduled';
 
+    $scope.restTable = function () {
+        console.log($scope.selectedTable);
+        $scope.changeTabledata($scope.selectedTable);
+    };
 
-    $scope.changeTabledata = function () {
+    $scope.changeTabledata = function (type) {
+        let $filtered_data = [...$scope.data]; // Create a copy of the original data
+        $scope.selectedTable = type; // Store the selected type
         if ($scope.selectedTable === 'Published') {
-            $scope.selectedTable = 'Published';
-            console.log('Published');
+            $filtered_data = $filtered_data.filter((item) => item.status === 'published');
         } else if ($scope.selectedTable === 'Scheduled') {
-            $scope.selectedTable = 'Scheduled';
-            console.log('Scheduled');
+            $filtered_data = $filtered_data.filter((item) => item.status === 'scheduled');
         } else if ($scope.selectedTable === 'Drafted') {
-            $scope.selectedTable = 'Drafted';
-            console.log('Drafted');
+            $filtered_data = $filtered_data.filter((item) => item.status === 'draft');
         }
-    }
+        $scope.items = $filtered_data; // Update the items displayed in the table 
+        $scope.tableLength = Math.ceil($scope.items.length / 4);
+    };
+
     $scope.$on('childAction', function (event, data) {
         if (data.action === 'edit') {
             alert(`Editing item: ${data.item.serialNo}`);

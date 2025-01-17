@@ -83,9 +83,9 @@ $route['instagram/login'] = "api_controller/login";
 $route['instagram/callback'] = "api_controller/callback";
 
 
-$route['posts/getposts'] = "post/getposts";
+$route['posts/getposts/(:any)'] = "post/getposts/$1";
 
-
+$route['try'] = 'api_controller/try2';
 // Route to get likes and reactions for a post
 // $route['facebook/get_likes_reactions/(:any)'] = 'facebook/get_likes_reactions/$1';
 

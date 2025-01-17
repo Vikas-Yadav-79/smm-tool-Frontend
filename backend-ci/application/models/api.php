@@ -281,6 +281,7 @@ class api extends CI_Model
         }
         curl_close($ch2);
         $this->session->set_userdata('Instagram_accessToken', $accesstoken1);
+        var_dump($this->session->all_userdata());
         $user_id = $this->session->userdata('user_id');
         $data2 = array(
             'user_id' => $user_id,
@@ -303,6 +304,7 @@ class api extends CI_Model
             if (!is_string($tag['username']) || empty($tag['username'])) {
                 return ['status' => false, 'message' => 'username must be a non-empty string.'];
             }
+
             if (!is_float($tag['x']) || !is_float($tag['y']) || $tag['x'] < 0.0 || $tag['x'] > 1.0 || $tag['y'] < 0.0 || $tag['y'] > 1.0) {
                 return ['status' => false, 'message' => 'x and y must be floats between 0.0 and 1.0.'];
             }

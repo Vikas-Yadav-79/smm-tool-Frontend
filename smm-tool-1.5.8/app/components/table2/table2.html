@@ -1,24 +1,36 @@
-<div>
+<div class="table_cont">
   <table>
     <thead>
       <tr>
         <th>Serial No</th>
         <th>Image</th>
         <th>Content</th>
-        <th>Time of Posting</th>
+        <th ng-if="$ctrl.data !== 'Drafted'">
+          <span ng-if="$ctrl.data === 'Scheduled'">schedule_time</span>
+          <span ng-if="$ctrl.data === 'Published'">published_time</span>
+        </th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="item in items">
+      <tr
+        ng-repeat="item in $ctrl.items | limitTo: itemsPerPage : (currentPage - 1) * itemsPerPage"
+      >
         <td>{{ item.id }}</td>
         <td>
-          <div class="image-container">
-            <img ng-src="{{ item.media_url }}" alt="Image" />
+          <div style="display: flex; justify-content: center">
+            <div class="image-container">
+              <img ng-src="{{ item.image_urls }}" alt="Image" />
+            </div>
           </div>
         </td>
-        <td>{{ item.caption }}</td>
-        <td>{{ item.time }}</td>
+        <td>{{ item.content }}</td>
+        <td ng-if="$ctrl.data !== 'Drafted'">
+          <span ng-if="$ctrl.data === 'Scheduled'">{{item.schedule_time}}</span>
+          <span ng-if="$ctrl.data === 'Published'"
+            >{{item.published_time}}</span
+          >
+        </td>
         <td>
           <button
             ng-click="show(item.id)"
@@ -77,4 +89,19 @@
       </tr>
     </tbody>
   </table>
+  <div class="pagination-controls">
+    <button
+      ng-click="currentPage = currentPage - 1"
+      ng-disabled="currentPage === 1 || $ctrl.count === 0"
+    >
+      Previous
+    </button>
+    <span>Page {{ currentPage }} of {{ $ctrl.count }}</span>
+    <button
+      ng-click="currentPage = currentPage + 1"
+      ng-disabled="currentPage === $ctrl.count || $ctrl.count === 0"
+    >
+      Next
+    </button>
+  </div>
 </div>

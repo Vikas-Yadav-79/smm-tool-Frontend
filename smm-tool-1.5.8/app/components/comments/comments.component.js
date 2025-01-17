@@ -7,15 +7,28 @@ angular.module("comment").component("comment", {
   },
   controller: function ($scope, $http) {
     $scope.id = this.data.id;
-    $scope.flag = false;
-    $http.get("http://localhost/codeigniter/index.php/instagram/getlikes/" + $scope.id)
-      .then(function (response) {
-        $scope.likes = response.data.like_count;
-        $scope.flag = true;
-      })
-      .catch(function (error) {
-        console.error("Error fetching Instagram login URL:", error);
-      });
+    $scope.flag = true;
+    // switch (this.data.platform) {
+    //   case "Instagram":
+    //     $http.get("http://localhost/codeigniter/index.php/instagram/getlikes/" + $scope.id)
+    //       .then(function (response) {
+    //         $scope.likes = response.data.like_count;
+    //         $scope.flag = true;
+    //       })
+    //       .catch(function (error) {
+    //         console.error("Error fetching Instagram login URL:", error);
+    //       });
+    //     break;
+    //   case "Facebook":
+
+    //     break;
+    //   case "LinkedIn":
+
+    //     break;
+    //   default:
+    //     break;
+    // }
+
 
     this.analytics = {
       image: 'assets/images/sample-post.jpg',

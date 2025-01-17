@@ -1,12 +1,13 @@
 'use strict';
 
-angular.module('table').component('table', {
-  templateUrl: '/app/components/table/table.html',
+angular.module('table2').component('table2', {
+  templateUrl: '/app/components/table2/table2.html',
   bindings: {
-    items: '<', // Input data passed to the table
+    items: '=', // Input data passed to the table
+    data: '=', // Selected
+    count: '<'
   },
   controller: function ($rootScope, $scope, $timeout) {
-    $scope.items = this.items;
     $scope.show = function (id) {
       let v = "id-" + id;
       const item = document.getElementById(v);
@@ -19,7 +20,8 @@ angular.module('table').component('table', {
       }
 
     }
-
+    $scope.itemsPerPage = 4;
+    $scope.currentPage = 1;
     $scope.handleAction = function (action, item) {
       $scope.show(item.id);
       $scope.$emit('childAction', { action, item });

@@ -6,21 +6,39 @@ angular.module('subnavbar').component('subnavbar', {
     onAction: '&',
     onApplyFilter: '&',
     data: '=',
-    filter: '='
+    filter: '=',
+    onSearch: '&',
+    onRest: '&',
   },
 
   controller: function ($scope) {
     $scope.activeButton = this.data;
     $scope.filter = this.filter;
-
-    this.setActiveButton = function (type) {
+    $scope.search = "";
+    $scope.showcross = false;
+    this.setActiveButton = (type) => {
       $scope.activeButton = type;
       this.data = type;
       if (this.onAction) {
-        this.onAction();
+        this.onAction({ type });
       }
     };
-
+    $scope.triggerSearch = ($event) => {
+      if ($event.key === 'Enter') {
+        this.onSearch({ query: $scope.search });
+        $event.target.blur();
+        $scope.showcross = true;
+      }
+    }
+    $scope.redoTable = () => {
+      $scope.search = "";
+      $scope.showcross = false;
+      this.onRest();
+      console.log(this.onRest());
+    }
+    setTimeout(() => {
+      componentHandler.upgradeDom();
+    }, 0);
     $scope.show = function () {
       let v = "filter";
       const item = document.getElementById(v);

@@ -1,5 +1,5 @@
 // app/app.js
-angular.module('myApp', ['ngRoute', 'sidebar', 'subnavbar', 'table', 'comment'])
+angular.module('myApp', ['ngRoute', 'sidebar', 'subnavbar', 'table2', 'comment'])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/login', {

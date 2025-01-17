@@ -2,8 +2,8 @@
 
 class api_controller extends CI_Controller
 {
-  private $app_id = '1382135032788086';
-  private $app_secret = 'e2ec2b6422972d35edfce9d4a1b122b9';
+  private $app_id = $_ENV['INSTAGRAM_APP_ID'];
+  private $app_secret = $_ENV['INSTAGRAM_APP_SECRET'];
 
   public function __construct()
   {
@@ -85,7 +85,7 @@ class api_controller extends CI_Controller
   }
   public function loginDilogbox()
   {
-    $url = 'https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=1382135032788086&redirect_uri=https://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/login&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish'; // The URL to redirect to
+    $url = 'https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=' . $this->app_id . '&redirect_uri=https://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/login&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish'; // The URL to redirect to
     redirect($url);
   }
   public function login()
