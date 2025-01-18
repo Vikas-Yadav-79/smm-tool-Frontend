@@ -1,6 +1,6 @@
 <div class="analytics-container" ng-if="flag">
   <div class="post-analytics">
-    <h2>Post Analytics</h2>
+    <h2 class="post-analytics-title">Post Analytics</h2>
     <div class="post-image">
       <img
         class="post-img"
@@ -8,7 +8,7 @@
         alt="Post Image"
       />
     </div>
-    <h3>{{$ctrl.data.content}}</h3>
+    <h3 class="post-content">{{$ctrl.data.content}}</h3>
     <div class="analytics-details">
       <p><strong>Likes:</strong> {{likes}}</p>
       <p><strong>Comments:</strong> {{$ctrl.analytics.comments.length}}</p>

@@ -283,7 +283,7 @@ th {
   font-family: Arial, sans-serif;
 }
 
-.post-analytics {
+/* .post-analytics {
   margin-bottom: 20px;
   text-align: center;
   display: flex;
@@ -309,6 +309,85 @@ th {
 
 .analytics-details p {
   margin: 5px 0;
+} */
+
+
+
+.post-analytics {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 700px;
+  margin: 30px auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-analytics-title {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+}
+
+.post-image {
+
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.post-img {
+  width: 533px;
+  height: 406px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* max-width: 100%; */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-content {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #333;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.analytics-details {
+  font-size: 1.1em;
+  color: #555;
+  margin-top: 20px;
+}
+
+.analytics-details p {
+  margin-bottom: 10px;
+}
+
+.analytics-details strong {
+  color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .post-analytics {
+    padding: 15px;
+  }
+
+  .post-analytics-title {
+    font-size: 1.8em;
+  }
+
+  .post-content {
+    font-size: 1.1em;
+  }
+
+  .analytics-details {
+    font-size: 1em;
+  }
 }
 
 /* .comments-section {
@@ -783,4 +862,16 @@ select {
 
 .pagination-controls button:disabled:hover {
   background-color: #ddd;
+}
+
+.close-btn {
+  color: white !important;
+  background-color: #007bff !important;
+  border-radius: 4px !important;
+  max-width: 700px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.mdl-dialog__actions {
+  padding: 8px 20px 8px 24px !important;
 }
