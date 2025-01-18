@@ -52,11 +52,14 @@ $route['facebook/login'] = 'facebook/login';
 $route['facebook/get_page_access_token'] = 'facebook/get_page_access_token';
 
 // Route to publish a post on the page
+$route['facebook/postMessage1'] = 'facebook/postMessage1';
+
+
 $route['facebook/postMessage'] = 'facebook/postMessage';
 
 $route['facebook/getPostLikes'] = 'facebook/getPostLikes';
 
-
+$route['facebook/getLongTermAccessToken'] = 'facebook/getLongTermAccessToken';
 
 $route['facebook/getPostComments'] = 'facebook/getPostComments';
 
@@ -65,6 +68,23 @@ $route['facebook/postComment'] = 'facebook/postComment';
 
 
 $route['facebook/updatePost'] = 'facebook/updatePost';
+
+
+$route['facebook/replyToComment'] = 'facebook/replyToComment';
+
+$route['facebook/getAllFacebookPosts'] = 'facebook/getAllFacebookPosts';
+
+
+$route['facebook/getSocialMediaAccounts'] = 'facebook/getSocialMediaAccounts';
+
+
+$route['facebook/createMultiMediaPost'] = 'facebook/createMultiMediaPost';
+
+
+
+
+
+
 
 
 
