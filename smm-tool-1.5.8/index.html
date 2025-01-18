@@ -1,46 +1,63 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp">
-<head>
-  <meta charset="UTF-8">
-  <title>Login/Signup App</title>
-  <!-- Include AngularJS -->
-  <script src="node_modules/angular/angular.min.js"></script>
-  <script src="node_modules/angular-route/angular-route.min.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login/Signup App</title>
+    <!-- Include AngularJS -->
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="node_modules/angular-route/angular-route.min.js"></script>
+
+
+    <script src="./app/components/sidebar/sidebar.module.js"></script>
+    <script src="./app/components/sidebar/sidebar.component.js"></script>
+    <script src="./app/components/subnavbar/subnavbar.module.js"></script>
+    <script src="./app/components/subnavbar/subnavbar.component.js"></script>
+    <script src="./app/components/table/table.module.js"></script>
+    <script src="./app/components/table/table.component.js"></script>
+    <!-- <script src="./app/components/comments/comments.module.js"></script>
+    <script src="./app/components/comments/comments.component.js"></script> -->
+
+
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script> -->
 <!-- Material files -->
  <!-- MDL CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.2.1/material.min.css" />
+<link rel="stylesheet" href="./app/components/auth/login.css">
+<link rel="stylesheet" href="./app/components/auth/signup.css">
 
-<!-- MDL JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.2.1/material.min.js"></script>
 
-  <!-- Include Your App Files -->
-  <script src="app/app.js"></script>
-  <script src="app/controllers/auth.controller.js"></script>
+    <!-- MDL JS (Material Design Lite Scripts) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.min.js"></script>
 
-  <!-- Add this to your index.html file -->
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '480761234690688', // Replace with your app ID
-      cookie     : true,
-      xfbml      : true,
-      version    : 'v12.0' // Use the latest version
-    });
-  };
+    <!-- Include Your App Files -->
+    <script src="app/app.js"></script>
+    <script src="app/controllers/auth.controller.js"></script>
 
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-</script>
+    <!-- Add this to your index.html file -->
+    <script>
+      window.fbAsyncInit = function () {
+        FB.init({
+          appId: "480761234690688", // Replace with your app ID
+          cookie: true,
+          xfbml: true,
+          version: "v12.0", // Use the latest version
+        });
+      };
 
-</head>
-<body ng-app="myApp">
-  <div ng-view></div> 
-</body>
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    </script>
+  </head>
+  <body ng-app="myApp">
+    <div ng-view></div>
+  </body>
 </html>

@@ -139,6 +139,8 @@ class Facebook extends CI_Controller {
     public function getSocialMediaAccounts() {
         // Get the logged-in user's ID from the session
         $userId = $this->session->userdata('user_id');
+        // var_dump($userId);
+       
     
         // Fetch all social media accounts associated with the user
         $this->db->select('*');
@@ -157,11 +159,15 @@ class Facebook extends CI_Controller {
 
     public function login() {
         // Get the access token from the POST request
-        $accessToken = $this->input->post('accessToken');
-        var_dump($accessToken);
+
+        // var_dump($this->session->all_userdata());
+
+        // var_dump($this->session->userdata('user_id'));
+        $accessToken = $this->session->userdata('facebook_Long_term_access_token');
+        // var_dump($accessToken);
         
         // Store the access token in session
-        $this->session->set_userdata('facebook_access_token', $accessToken);
+        // $this->session->set_userdata('facebook_access_token', $accessToken);
     
         // Use the token to get user data from Facebook
         $userData = $this->facebook_lib->getUserData($accessToken); // id , name from facebook
@@ -173,6 +179,7 @@ class Facebook extends CI_Controller {
         $userName = $userData['name']; // You can use other user details as well
         
         // Check if the user already exists in the social_accounts table
+       
         $this->db->where('user_id', $this->session->userdata('user_id')); // Assuming you have user_id stored in session
         $this->db->where('platform', 'Facebook');
         $query = $this->db->get('social_accounts');

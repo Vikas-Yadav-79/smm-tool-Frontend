@@ -1,6 +1,6 @@
 // app/app.js
-angular.module('myApp', ['ngRoute'])
-  .config(function($routeProvider,$locationProvider) {
+angular.module('myApp', ['ngRoute', 'sidebar', 'subnavbar', 'table'])
+  .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/login', {
         templateUrl: 'app/components/auth/login.html',
@@ -26,7 +26,7 @@ angular.module('myApp', ['ngRoute'])
           }
         }
       })
-      .when('/dashboard',{
+      .when('/dashboard', {
         templateUrl: 'app/components/dashboardd/dashboard.html',
         controller: 'AuthController',
         resolve:{
@@ -39,7 +39,7 @@ angular.module('myApp', ['ngRoute'])
         }
       })
       .when('/profile', {
-        templateUrl: 'app/components/dashboardd/profile-update.html', 
+        templateUrl: 'app/components/dashboardd/profile-update.html',
         controller: 'AuthController',
         resolve:{
           auth: function($location) {
@@ -49,10 +49,10 @@ angular.module('myApp', ['ngRoute'])
 
           }
         }
-    })
+      })
       .otherwise({
         redirectTo: '/login'
       });
 
-      $locationProvider.html5Mode(false);
+    $locationProvider.html5Mode(false);
   });
