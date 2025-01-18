@@ -1,294 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .dashboard-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            overflow-y: auto;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: Arial, sans-serif;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        i {
-            padding-right: 15px;
-        }
-
-        .icon {
-            display: flex;
-            align-items: center;
-        }
-
-        .circle {
-            background-color: #4a90e2;
-            color: white;
-            border-radius: 50%;
-            padding: 5px 10px;
-            font-weight: bold;
-        }
-
-        .title {
-            margin-left: 10px;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .add-btn {
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 20px;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-        }
-
-        .channels {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .channel-item {
-            display: flex;
-            align-items: center;
-            padding-top: 30px;
-            padding-left: 20px;
-            cursor: pointer;
-            align-items: end;
-            font-size: 16px;
-        }
-
-        .channel-item:hover {
-            background-color: #eef3f8;
-            border-radius: 4px;
-            padding-left: 5px;
-        }
-
-        .icon {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            margin-right: 20px;
-            align-items: start;
-            border-radius: 50%;
-            background-color: #ddd;
-        }
-
-        .fb-icon {
-            background-color: #3b5998;
-        }
-
-        .ig-icon {
-            background-color: #e1306c;
-        }
-
-        .li-icon {
-            background-color: #0077b5;
-        }
-
-        .th-icon {
-            background-color: #000;
-        }
-
-        .dropdown-icon {
-            margin-right: 10px;
-        }
-
-        .footer {
-            margin-top: 20px;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-        }
-
-        .manage-link {
-            display: block;
-            color: #4a90e2;
-            text-decoration: none;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .manage-link:hover {
-            text-decoration: underline;
-        }
-
-        .channels .channel-item i {
-            margin-right: 10px;
-            color: #555;
-            font-size: 18px;
-        }
-
-        .footer {
-            margin-top: 370px;
-        }
-
-        .channels .channel-item:hover i {
-            color: #4a90e2;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #FFFFFF;
-            border: solid 1px;
-            border-color: #555;
-            padding: 10px 20px;
-        }
-
-        .navbar .logo img {
-            width: 60px;
-            border: solid;
-            border-radius: 100%;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-        }
-
-        .nav-links li {
-            margin: 0 15px;
-        }
-
-        .nav-links li a {
-            color: #ACABAB;
-            text-decoration: none;
-            font-size: 18px;
-            padding: 10px;
-        }
-
-        .nav-links li a:hover {
-            background-color: #555;
-            border-radius: 5px;
-        }
-
-        .profile-icon {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-
-
-        }
-
-        .profile-icon img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin-right: 10px;
-            border: 3px solid #4a90e2;
-        }
-        .profile-icon-but{
-            background: none;
-            border: none;
-        }
-
-        .profile-icon:hover  {
-            color: #4a90e2;
-        }
-
-        div[ng-if="socialAccounts.length > 0"] ul li:hover {
-            background-color: #f0f0f0;
-            /* Change background color on hover */
-            color: #4a90e2;
-            /* Change text color on hover */
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="dashboard-container" ng-controller="AuthController" ng-init="getSocialMediaAccounts()">
-
-        <nav class="navbar">
-            <div class="logo">
-                <img src="app/assets/images/Almalogo.png" alt="Logo" />
-            </div>
-            <ul class="nav-links">
-                <!-- <li><a href="#create">Create</a></li>
-              <li><a href="#publish">Publish</a></li>
-              <li><a href="#analyse">Analyse</a></li>
-              <li><a href="#profile">Profile</a></li> -->
-                <li>
-                    <button class="profile-icon-but" ng-click="goToProfileUpdate()">
-                        <div class="profile-icon">
-                            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80" alt="Profile">
-                        </div>
-                    </button>
-
-                </li>
-
-
-            </ul>
-        </nav>
-
-        <div class="sidebar">
-            <div class="header">
-                <span class="title">All Channels</span>
-                <button class="add-btn">+</button>
-            </div>
-            <div>
-                <p>Your Social Media Accounts</p>
-                <div ng-if="socialAccounts.length > 0">
-                    <ul style="list-style-type: none; padding: 0;">
-                        <li ng-repeat="account in socialAccounts"
-                            style="padding: 10px; cursor: pointer; transition: background-color 0.3s;">
-                            <b>{{ account.account_name }}</b> ({{ account.platform }})
-                            <!-- You can also display other details like access_token or other info -->
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <ul class="channels">
-
-
-                <li class="channel-item">
-                    <button style="border: hidden; background-color: #f9f9f9;" ng-click="facebookLogin()">
-                        <i class="fab fa-facebook-f"></i> Connect Facebook
-                    </button>
-                </li>
-                <li class="channel-item">
-                    <i class="fab fa-instagram"></i> Connect Instagram
-                </li>
-                <li class="channel-item">
-                    <i class="fab fa-linkedin-in"></i> Connect LinkedIn
-                </li>
-                <li class="channel-item">
-                    <i class="fas fa-comments"></i> Connect Threads
-                </li>
-                <li class="channel-item">
-                    <i class="fas fa-chevron-down"></i> Show more channels
-                </li>
-            </ul>
-        </div>
+<div class="dashboard-container">
+  <sidebar on-connect="connectHendal(action)"></sidebar>
+  <div style="width: -webkit-fill-available">
+    <subnavbar
+      data="selectedTable"
+      on-action="changeTabledata(type)"
+      on-apply-filter="onApplyFilter()"
+      filter="filter"
+      on-search="filterData(query)"
+      on-rest="restTable()"
+    >
+      ></subnavbar
+    >
+    <table2
+      ng-if="flag"
+      data="selectedTable"
+      count="tableLength"
+      items="items"
+    ></table2>
+  </div>
+  <dialog class="mdl-dialog dialog-analyze">
+    <comment ng-if="selectedItem" data="selectedItem"></comment>
+    <div class="mdl-dialog__actions">
+      <button
+        type="button"
+        class="mdl-button close-btn"
+        ng-click="closeDialog()"
+      >
+        Close
+      </button>
+    </div>
+  </dialog>
+</div>

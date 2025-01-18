@@ -5,40 +5,57 @@ angular.module('subnavbar').component('subnavbar', {
   bindings: {
     onAction: '&',
     onApplyFilter: '&',
-    data: '<'
+    data: '=',
+    filter: '=',
+    onSearch: '&',
+    onRest: '&',
   },
 
   controller: function ($scope) {
-    $scope.activeButton = 'Published';
-    $scope.filter = {
-      min: 0,
-      max: 70,
-      selectedOption: "",
-      selectedType: "All",
-      startDate: "",
-      endDate: "",
-
-    };
-
-    this.setActiveButton = function (type) {
+    $scope.activeButton = this.data;
+    $scope.filter = this.filter;
+    $scope.search = "";
+    $scope.showcross = false;
+    this.setActiveButton = (type) => {
+      $scope.activeButton = type;
+      this.data = type;
       if (this.onAction) {
-        this.activeButton = type;
         this.onAction({ type });
       }
     };
-    this.applyFilter = function () {
-      console.log($scope.endDate);
+    $scope.triggerSearch = ($event) => {
+      if ($event.key === 'Enter') {
+        this.onSearch({ query: $scope.search });
+        $event.target.blur();
+        $scope.showcross = true;
+      }
+    }
+    $scope.redoTable = () => {
+      $scope.search = "";
+      $scope.showcross = false;
+      this.onRest();
+      console.log(this.onRest());
+    }
+    setTimeout(() => {
+      componentHandler.upgradeDom();
+    }, 0);
+    $scope.show = function () {
+      let v = "filter";
+      const item = document.getElementById(v);
+      if (item.classList.contains("hide")) {
+        document.getElementById(v).classList.remove("hide");
+        document.getElementById(v).classList.add("active");
+      } else {
+        document.getElementById(v).classList.remove("active");
+        document.getElementById(v).classList.add("hide");
+      }
+
+    }
+    this.applyFilter = () => {
+      this.filter = $scope.filter;
       if (this.onApplyFilter) {
-        this.onApplyFilter({
-          filters: {
-            min: $scope.min,
-            max: $scope.max,
-            selectedOption: $scope.selectedOption,
-            selectedType: $scope.selectedType,
-            startDate: $scope.startDate,
-            endDate: $scope.endDate,
-          },
-        });
+        this.onApplyFilter();
+        $scope.show();
       }
     }
   }
