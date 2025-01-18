@@ -16,7 +16,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     $scope.socialAccounts = []; // To store the social media accounts
 
     // Function to fetch social media accounts
-    $scope.getSocialMediaAccounts = function() {
+    $scope.getSocialMediaAccounts = function () {
         // Get the user ID from localStorage or session
         var userId = localStorage.getItem('user_id');
 
@@ -29,21 +29,21 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         $http.get('http://localhost/CodeIgniter-2.2.0/index.php/facebook/getSocialMediaAccounts', {
             params: { user_id: userId }
         })
-        .then(function(response) {
-            if (response.data.status === 'success') {
-                // Successfully retrieved the accounts, store them in the scope variable
-                $scope.socialAccounts = response.data.accounts;
-                console.log('Social media accounts:', $scope.socialAccounts);
-            } else {
-                alert('Error fetching accounts: ' + response.data.message);
-            }
-        }, function(error) {
-            console.error('Error:', error);
-            alert('An error occurred while fetching social media accounts');
-        });
+            .then(function (response) {
+                if (response.data.status === 'success') {
+                    // Successfully retrieved the accounts, store them in the scope variable
+                    $scope.socialAccounts = response.data.accounts;
+                    console.log('Social media accounts:', $scope.socialAccounts);
+                } else {
+                    alert('Error fetching accounts: ' + response.data.message);
+                }
+            }, function (error) {
+                console.error('Error:', error);
+                alert('An error occurred while fetching social media accounts');
+            });
     };
 
-    $scope.postToFacebook = function() {
+    $scope.postToFacebook = function () {
         if (!$scope.pageId || !$scope.accessToken) {
             alert('Page ID and Access Token are required');
             return;
@@ -56,7 +56,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         };
 
         $http.post('https://localhost/CodeIgniter-2.2.0/index.php/facebook/postMessage', payload)
-            .then(function(response) {
+            .then(function (response) {
                 if (response.data.status === 'success') {
                     alert('Post published successfully!');
                     console.log('Response:', response.data.response);
@@ -64,15 +64,15 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
                     alert('Error posting to Facebook: ' + JSON.stringify(response.data.response));
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error:', error);
                 alert('An error occurred while posting to Facebook.');
             });
     };
 
 
-    $scope.register = function() {
-        if ($scope.registerForm.$valid) { 
+    $scope.register = function () {
+        if ($scope.registerForm.$valid) {
             console.log('Registering with:', $scope.registerData);
             $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/register', $scope.registerData)
                 .then(function (response) {
@@ -96,7 +96,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     };
 
 
-    $scope.login = function() {
+    $scope.login = function () {
         if ($scope.loginForm.$valid) {
             console.log('Logging in with:', $scope.loginData);
             $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/login', $scope.loginData)
@@ -122,10 +122,9 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     $scope.update = function () {
         if ($scope.updateForm.$valid) {
             console.log('Updating user with:', $scope.updateData);
-             if($scope.updateData.password === ''){
-                 $scope.updateData.password = ;
-
-             }
+            if ($scope.updateData.password === '') {
+                delete $scope.updateData.password;
+            }
             $http.put('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/update', $scope.updateData)
 
                 .then(function (response) {
@@ -144,7 +143,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         }
     };
 
-    $scope.goToProfileUpdate = function() {
+    $scope.goToProfileUpdate = function () {
         alert("Hello");
 
         $location.path('/profile');
