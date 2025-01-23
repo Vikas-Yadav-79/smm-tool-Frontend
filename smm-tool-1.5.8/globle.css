@@ -555,6 +555,7 @@ th {
 .main-content {
   width: 100%;
   margin-left: 0px;
+  margin-bottom: 24px;
 }
 
 .sel {
@@ -602,7 +603,6 @@ th {
   border-right-width: 0px;
   border-top-width: 0px;
   border-bottom-width: 3px;
-  margin: 10px;
 }
 
 .container1 {
@@ -800,12 +800,15 @@ select {
   padding: 1rem;
   font-size: 0.875rem;
   color: #374151;
+  border-radius: .5rem;
+  border: 1px solid #9c9c9c7a;
+  background: white;
 }
 
 .table-dropbox {
+  translate: 155px -155px;
   position: absolute;
   z-index: 10;
-  background-color: white;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: fit-content;
@@ -825,43 +828,6 @@ select {
 
 .filter-li {
   padding: 5px;
-}
-
-.table_cont {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  align-items: center;
-}
-
-.pagination-controls button {
-  padding: 8px 16px;
-  margin: 0 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 5px;
-}
-
-
-
-.pagination-controls button:disabled {
-  background-color: #ddd;
-  color: #888;
-  cursor: not-allowed;
-  border: 1px solid #ccc;
-}
-
-.pagination-controls button:disabled:hover {
-  background-color: #ddd;
 }
 
 .close-btn {

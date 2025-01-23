@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sidebar').component('sidebar', {
-  templateUrl: '/app/components/sidebar/sidebar.html',
+  templateUrl: '../../smm-tool-Frontend/smm-tool-1.5.8/app/components/sidebar/sidebar.html',
   bindings: {
     onConnect: '&',
   },

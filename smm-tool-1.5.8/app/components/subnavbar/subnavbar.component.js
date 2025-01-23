@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('subnavbar').component('subnavbar', {
-  templateUrl: '/app/components/subnavbar/subnavbar.html',
+  templateUrl: '../../smm-tool-Frontend/smm-tool-1.5.8/app/components/subnavbar/subnavbar.html',
   bindings: {
     onAction: '&',
     onApplyFilter: '&',

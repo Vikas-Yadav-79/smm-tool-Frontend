@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module("comment").component("comment", {
-  templateUrl: '/app/components/comments/comments.html',
+  templateUrl: '../../smm-tool-Frontend/smm-tool-1.5.8/app/components/comments/comments.html',
   bindings: {
     data: '<',
   },

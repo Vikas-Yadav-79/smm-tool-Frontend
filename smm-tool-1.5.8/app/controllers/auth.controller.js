@@ -112,7 +112,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
                     }
                 }, function (error) {
                     console.log('Error:', error);
-                    alert('An error occurred while logging in');
+                    alert('An error occurred while logging in ');
                 });
         } else {
             alert('Login form is invalid');
@@ -187,21 +187,23 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         .then(function (response) {
             $scope.data = response.data;
             $scope.flag = true;
+            $scope.data.forEach(post => {
+                const dateObj = new Date(post.published_time);
+                post.published_time = dateObj;
+            });
             $scope.items = $scope.data;
-            console.log(response.data);
             /// to add filter of facebook instagram etc
 
 
 
             // filter to inistial selected item 
             $scope.items = $scope.items.filter((item) => item.status === 'scheduled');
-            $scope.tableLength = Math.ceil($scope.items.length / 4);
+            $scope.tableLength = Math.ceil($scope.items.length / 2);
         })
         .catch(function (error) {
             console.error("Error fetching Instagram login URL:", error);
         });
 
-    $scope.filteredItems = [...$scope.items];
     $scope.filteredSearch = [...$scope.items];
     $scope.filter = {
         min: 0,
@@ -214,16 +216,13 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     };
 
     $scope.filterData = (query) => {
-        console.log(query);
         const searchQuery = query.toString().toLowerCase();
-        console.log(searchQuery);
         $scope.filteredData = $scope.items.filter(item => {
             const content = item.content ? item.content.toString().toLowerCase() : '';
             return content.includes(searchQuery);
         });
-        console.log($scope.$filteredData);
         $scope.items = $scope.filteredData;
-        $scope.tableLength = Math.ceil($scope.items.length / 4);
+        $scope.tableLength = Math.ceil($scope.items.length / 2);
     };
 
     $scope.connectHendal = function (action) {
@@ -242,6 +241,8 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         }
     }
     $scope.onApplyFilter = function () {
+
+        $scope.filteredItems = [...$scope.items];
         const { min, max, selectedOption, selectedType, startDate, endDate } = $scope.filter;
         if (selectedType !== 'All') {
             console.log('Selected type:', selectedType);
@@ -259,12 +260,19 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
                 return withinDateRange;
             });
         }
-        if (selectedOption === 'asc') {
-            $scope.filteredItems.sort((a, b) => new Date(a.time) - new Date(b.time));
-        } else if (selectedOption === 'desc') {
-            $scope.filteredItems.sort((a, b) => new Date(b.time) - new Date(a.time));
+        if ($scope.selectedTable === "Scheduled") {
+            if (selectedOption === 'asc') {
+                $scope.filteredItems.sort((a, b) => new Date(a.schedule_time) - new Date(b.schedule_time));
+            } else if (selectedOption === 'desc') {
+                $scope.filteredItems.sort((a, b) => new Date(b.schedule_time) - new Date(a.schedule_time));
+            }
+        } else if ($scope.selectedTable === "Published") {
+            if (selectedOption === 'asc') {
+                $scope.filteredItems.sort((a, b) => new Date(a.published_time) - new Date(b.published_time));
+            } else if (selectedOption === 'desc') {
+                $scope.filteredItems.sort((a, b) => new Date(b.published_time) - new Date(a.published_time));
+            }
         }
-        console.log($scope.filteredItems);
         $scope.items = $scope.filteredItems;
     };
     $scope.selectedTable = 'Scheduled';
@@ -285,7 +293,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
             $filtered_data = $filtered_data.filter((item) => item.status === 'draft');
         }
         $scope.items = $filtered_data; // Update the items displayed in the table 
-        $scope.tableLength = Math.ceil($scope.items.length / 4);
+        $scope.tableLength = Math.ceil($scope.items.length / 2);
     };
 
     $scope.$on('childAction', function (event, data) {
@@ -304,6 +312,8 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         $scope.selectedItem = null;
         dialog.close();
     }
+
+
 
 });
 // pages_read_user_engagement

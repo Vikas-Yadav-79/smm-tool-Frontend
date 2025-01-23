@@ -1,19 +1,29 @@
 <?php
 
+// if (file_exists(__DIR__ . '/.env')) {
+// 	$lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+// 	foreach ($lines as $line) {
+// 		if (strpos(trim($line), '#') === 0) continue; // Skip comments
+// 		$parts = explode('=', $line, 2); // Split into two parts
+// 		$key = isset($parts[0]) ? trim($parts[0]) : null;
+// 		$value = isset($parts[1]) ? trim($parts[1]) : null;
+// 		if ($key !== null && $value !== null) {
+// 			$_ENV[$key] = $value;
+// 		}
+// 	}
+// }
+
+// define('ENVIRONMENT', isset($_ENV['ENVIRONMENT']) ? $_ENV['ENVIRONMENT'] : 'production');
 if (file_exists(__DIR__ . '/.env')) {
 	$lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 	foreach ($lines as $line) {
 		if (strpos(trim($line), '#') === 0) continue; // Skip comments
-		$parts = explode('=', $line, 2); // Split into two parts
-		$key = isset($parts[0]) ? trim($parts[0]) : null;
-		$value = isset($parts[1]) ? trim($parts[1]) : null;
-		if ($key !== null && $value !== null) {
-			$_ENV[$key] = $value;
-		}
+		list($key, $value) = explode('=', $line, 2);
+		putenv(trim($key) . '=' . trim($value)); // Set environment variables
 	}
 }
 
-define('ENVIRONMENT', isset($_ENV['ENVIRONMENT']) ? $_ENV['ENVIRONMENT'] : 'production');
+define('ENVIRONMENT', getenv('ENVIRONMENT') ? getenv('ENVIRONMENT') : 'production');
 
 /*
  *---------------------------------------------------------------

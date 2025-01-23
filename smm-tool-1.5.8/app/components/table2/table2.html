@@ -1,107 +1,292 @@
 <div class="table_cont">
-  <table>
-    <thead>
-      <tr>
-        <th>Serial No</th>
-        <th>Image</th>
-        <th>Content</th>
-        <th ng-if="$ctrl.data !== 'Drafted'">
-          <span ng-if="$ctrl.data === 'Scheduled'">schedule_time</span>
-          <span ng-if="$ctrl.data === 'Published'">published_time</span>
-        </th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        ng-repeat="item in $ctrl.items | limitTo: itemsPerPage : (currentPage - 1) * itemsPerPage"
-      >
-        <td>{{ item.id }}</td>
-        <td>
-          <div style="display: flex; justify-content: center">
-            <div class="image-container">
-              <img ng-src="{{ item.image_urls }}" alt="Image" />
+  <div class="container" style="width: 800px">
+    <div
+      class="custom-full-with-time"
+      ng-repeat="post in $ctrl.items | limitTo: itemsPerPage : (currentPage - 1) * itemsPerPage track by post.id"
+    >
+      <div style="gap: 16px; display: flex; flex-direction: column">
+        <h3
+          ng-if="::checkDate(post.published_time,post.id)"
+          style="
+            margin: 0;
+            font-size: clamp(1rem, 1.1667rem + -0.1852vw, 1.125rem);
+            font-weight: 700;
+            line-height: 20px;
+          "
+        >
+          {{ post.published_time | date: 'EEEE,' }}
+          <span style="color: #646464">
+            {{post.published_time | date: 'MMMM dd'}}</span
+          >
+        </h3>
+        <div style="gap: 32px; display: flex">
+          <div style="margin: 15px 5px 0 0">
+            <span
+              style="font-weight: 500; font-size: 14px"
+              ng-if="$ctrl.selectedtab != 'Scheduled' && $ctrl.selectedtab != 'Drafted'"
+              >{{ post.published_time | date:'HH:mm a' }}</span
+            >
+          </div>
+          <div class="custom-post-container">
+            <div class="custom-post-content">
+              <div class="custom-post-header">
+                <div class="post-hadder">
+                  <svg
+                    ng-if="post.platform === 'Instagram'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="35"
+                    height="35"
+                    viewBox="0 0 48 48"
+                  >
+                    <radialGradient
+                      id="yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1"
+                      cx="19.38"
+                      cy="42.035"
+                      r="44.899"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop offset="0" stop-color="#fd5"></stop>
+                      <stop offset=".328" stop-color="#ff543f"></stop>
+                      <stop offset=".348" stop-color="#fc5245"></stop>
+                      <stop offset=".504" stop-color="#e64771"></stop>
+                      <stop offset=".643" stop-color="#d53e91"></stop>
+                      <stop offset=".761" stop-color="#cc39a4"></stop>
+                      <stop offset=".841" stop-color="#c837ab"></stop>
+                    </radialGradient>
+                    <path
+                      fill="url(#yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1)"
+                      d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
+                    ></path>
+                    <radialGradient
+                      id="yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2"
+                      cx="11.786"
+                      cy="5.54"
+                      r="29.813"
+                      gradientTransform="matrix(1 0 0 .6663 0 1.849)"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop offset="0" stop-color="#4168c9"></stop>
+                      <stop
+                        offset=".999"
+                        stop-color="#4168c9"
+                        stop-opacity="0"
+                      ></stop>
+                    </radialGradient>
+                    <path
+                      fill="url(#yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2)"
+                      d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
+                    ></path>
+                    <path
+                      fill="#fff"
+                      d="M24,31c-3.859,0-7-3.14-7-7s3.141-7,7-7s7,3.14,7,7S27.859,31,24,31z M24,19c-2.757,0-5,2.243-5,5	s2.243,5,5,5s5-2.243,5-5S26.757,19,24,19z"
+                    ></path>
+                    <circle cx="31.5" cy="16.5" r="1.5" fill="#fff"></circle>
+                    <path
+                      fill="#fff"
+                      d="M30,37H18c-3.859,0-7-3.14-7-7V18c0-3.86,3.141-7,7-7h12c3.859,0,7,3.14,7,7v12	C37,33.86,33.859,37,30,37z M18,13c-2.757,0-5,2.243-5,5v12c0,2.757,2.243,5,5,5h12c2.757,0,5-2.243,5-5V18c0-2.757-2.243-5-5-5H18z"
+                    ></path>
+                  </svg>
+                  <svg
+                    ng-if="post.platform === 'Facebook'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="35"
+                    height="35"
+                    viewBox="0 0 48 48"
+                  >
+                    <path
+                      fill="#039be5"
+                      d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"
+                    ></path>
+                    <path
+                      fill="#fff"
+                      d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"
+                    ></path>
+                  </svg>
+                  <span style="align-content: center"
+                    >{{ post.account_name }}</span
+                  >
+                </div>
+                <p>{{ post.content }}</p>
+              </div>
+              <div class="row">
+                <div
+                  class="image-wrapper"
+                  ng-repeat="image in post.image_urls track by $index"
+                >
+                  <img
+                    ng-src="{{ image }}"
+                    alt="Image {{$index + 1}}"
+                    ng-click="openDialog(post.image_urls, $index)"
+                  />
+                  <span class="eye-icon"
+                    ><i class="material-icons" style="padding: 0 !important"
+                      >visibility</i
+                    ></span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="custom-post-footer">
+              <span style="align-content: center"
+                >Posted from {{ post.platform }}</span
+              >
+              <div>
+                <a
+                  href="{{ post.link }}"
+                  style="
+                    border: 1px solid #949494;
+                    border-radius: 4px;
+                    height: 32px;
+                    padding: 0 14px;
+                    display: inline-flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                  class="mdl-button mdl-js-button"
+                  target="_blank"
+                  >View Post</a
+                >
+                <button
+                  ng-click="show(post.id)"
+                  class="mdl-button mdl-js-button"
+                  style="
+                    border: 1px solid #949494;
+                    min-width: 32px;
+                    border-radius: 4px;
+                    padding: 0;
+                    height: 32px;
+                    display: inline-flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-weight: 100 !important;
+                  "
+                >
+                  <i class="material-icons" style="padding: 0; font-size: 18px"
+                    >more_vert</i
+                  >
+                </button>
+                <div class="hide table-dropbox" id="id-{{post.id}}">
+                  <ul class="table-ul">
+                    <li class="table-li" ng-click="handleAction('edit', post)">
+                      Edit
+                      <svg
+                        class="icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="15px"
+                        height="15px"
+                        viewBox="0 0 512 512"
+                      >
+                        <path
+                          d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"
+                        />
+                      </svg>
+                    </li>
+                    <li
+                      class="table-li"
+                      ng-click="handleAction('analyze', post)"
+                    >
+                      Analyze
+                      <svg
+                        class="icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 576 512"
+                        width="15px"
+                        height="15px"
+                      >
+                        <path
+                          d="M304 240l0-223.4c0-9 7-16.6 16-16.6C443.7 0 544 100.3 544 224c0 9-7.6 16-16.6 16L304 240zM32 272C32 150.7 122.1 50.3 239 34.3c9.2-1.3 17 6.1 17 15.4L256 288 412.5 444.5c6.7 6.7 6.2 17.7-1.5 23.1C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zm526.4 16c9.3 0 16.6 7.8 15.4 17c-7.7 55.9-34.6 105.6-73.9 142.3c-6 5.6-15.4 5.2-21.2-.7L320 288l238.4 0z"
+                        />
+                      </svg>
+                    </li>
+                    <li
+                      class="table-li"
+                      ng-click="handleAction('delete', post)"
+                    >
+                      Delete
+                      <svg
+                        class="icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512"
+                        width="15px"
+                        height="15px"
+                      >
+                        <path
+                          fill="#ff0000"
+                          d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
+                        />
+                      </svg>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-        </td>
-        <td>{{ item.content }}</td>
-        <td ng-if="$ctrl.data !== 'Drafted'">
-          <span ng-if="$ctrl.data === 'Scheduled'">{{item.schedule_time}}</span>
-          <span ng-if="$ctrl.data === 'Published'"
-            >{{item.published_time}}</span
-          >
-        </td>
-        <td>
-          <button
-            ng-click="show(item.id)"
-            class="mdl-button mdl-js-button mdl-button--icon"
-          >
-            <i class="material-icons">more_vert</i>
-          </button>
-          <div class="hide table-dropbox" id="id-{{item.id}}">
-            <ul class="table-ul">
-              <li class="table-li" ng-click="handleAction('edit', item)">
-                Edit
-                <svg
-                  class="icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="15px"
-                  height="15px"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"
-                  />
-                </svg>
-              </li>
-              <li class="table-li" ng-click="handleAction('analyze', item)">
-                Analyze
-                <svg
-                  class="icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 576 512"
-                  width="15px"
-                  height="15px"
-                >
-                  <path
-                    d="M304 240l0-223.4c0-9 7-16.6 16-16.6C443.7 0 544 100.3 544 224c0 9-7.6 16-16.6 16L304 240zM32 272C32 150.7 122.1 50.3 239 34.3c9.2-1.3 17 6.1 17 15.4L256 288 412.5 444.5c6.7 6.7 6.2 17.7-1.5 23.1C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zm526.4 16c9.3 0 16.6 7.8 15.4 17c-7.7 55.9-34.6 105.6-73.9 142.3c-6 5.6-15.4 5.2-21.2-.7L320 288l238.4 0z"
-                  />
-                </svg>
-              </li>
-              <li class="table-li" ng-click="handleAction('delete', item)">
-                Delete
-                <svg
-                  class="icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512"
-                  width="15px"
-                  height="15px"
-                >
-                  <path
-                    fill="#ff0000"
-                    d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
-                  />
-                </svg>
-              </li>
-            </ul>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="pagination-controls">
     <button
-      ng-click="currentPage = currentPage - 1"
+      ng-click="previousPage()"
       ng-disabled="currentPage === 1 || $ctrl.count === 0"
     >
       Previous
     </button>
     <span>Page {{ currentPage }} of {{ $ctrl.count }}</span>
     <button
-      ng-click="currentPage = currentPage + 1"
+      ng-click="nextPage()"
       ng-disabled="currentPage === $ctrl.count || $ctrl.count === 0"
     >
       Next
     </button>
   </div>
+</div>
+<div class="dialog" ng-class="{ show: isDialogOpen }">
+  <button
+    class="arrow-btn"
+    ng-click="imagePage =  imagePage -1 "
+    ng-disabled="imagePage === 0 || imageCount === 0 "
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+      <path
+        d="M15.293 3.293 6.586 12l8.707 8.707 1.414-1.414L9.414 12l7.293-7.293-1.414-1.414z"
+      />
+    </svg>
+  </button>
+  <span class="dialog-close" ng-click="closeDialog()"
+    ><i class="material-icons">close</i></span
+  >
+  <div class="dilog-div-image">
+    <span class="page-image">Page {{ imagePage + 1 }} of {{ imageCount }}</span>
+    <img
+      class="dialog-img"
+      ng-src="{{ selectedImage[imagePage] }}"
+      alt="Full View"
+    />
+    <div class="inspect-div">
+      <img
+        class="inspect-img"
+        ng-class="{selected : $index === imagePage}"
+        ng-repeat="image in selectedImage track by $index"
+        ng-src="{{ image }}"
+        alt="Image {{$index + 1}}"
+      />
+    </div>
+  </div>
+
+  <button
+    class="arrow-btn"
+    ng-click="imagePage = imagePage + 1"
+    ng-disabled="imagePage === imageCount - 1 || imageCount === 0"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+      <path
+        d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"
+      />
+    </svg>
+  </button>
 </div>
