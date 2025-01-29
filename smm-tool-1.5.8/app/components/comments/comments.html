@@ -97,7 +97,7 @@
                 <div class="reply-section">
                   <button
                     class="reply-button"
-                    ng-click="$ctrl.replyToComment(comment)"
+                    ng-click="$ctrl.replyToComment(reply)"
                   >
                     Reply
                   </button>
@@ -128,7 +128,7 @@
           ng-click="$ctrl.replyToComment(comment)"
         >
           <i class="material-icons" style="padding: 0">favorite</i>
-          1 like
+          {{likes}} like
         </spam>
         <span
           style="
@@ -140,11 +140,16 @@
           ng-click="$ctrl.replyToComment(comment)"
         >
           <i class="material-icons" style="padding: 0">mode_comment</i>
-          1 comment
+          {{commentsTotal}} comment
         </span>
       </div>
       <div style="padding: 1px 15px; display: flex">
+        <span
+          style="text-wrap: nowrap; width: min-content; align-content: center"
+          >{{commnetreplayto}}</span
+        >
         <input
+          id="input1"
           class="add_comment"
           style="
             border: none;
@@ -156,7 +161,7 @@
           placeholder="Add a comment..."
           type="text"
         />
-        <button class="mdl-button">Post</button>
+        <button class="mdl-button" on-click="onClickReply()">Post</button>
       </div>
     </div>
   </div>

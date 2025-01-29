@@ -62,6 +62,7 @@ class Auth extends CI_Controller
                                 $access_token = $row['access_token'];
                             }
                             $this->session->set_userdata($row['platform'] . '_accessToken', $access_token);
+                        } else if ($row['platform'] === 'Facebook') {
                         } else {
                             $this->session->set_userdata($row['platform'] . '_accessToken', $row['access_token']);
                         }
@@ -98,6 +99,18 @@ class Auth extends CI_Controller
     {
         $this->session->sess_destroy();  // Destroy the session
         echo json_encode(['status' => 'success', 'message' => 'Logged out successfully']);
+    }
+
+
+    public function checkConnection()
+    {
+
+        $userid = $this->session->userdata('user_id');
+        $this->db->select('platform,account_name');
+        $this->db->where('user_id', $userid);
+        $query = $this->db->get('social_accounts');
+        $result = $query->result_array();
+        echo json_encode(['status' => 'success', 'connection' => $result]);
     }
 
 

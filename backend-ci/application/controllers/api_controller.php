@@ -7,7 +7,6 @@ class api_controller extends CI_Controller
 
   public function __construct()
   {
-    echo getenv("INSTAGRAM_APP_ID");
     $this->app_id = getenv("INSTAGRAM_APP_ID");
     $this->app_secret = getenv("INSTAGRAM_APP_SECRET");
 
@@ -97,7 +96,11 @@ class api_controller extends CI_Controller
     if (!isset($userid)) {
       show_error("your are not authorised to access this data");
     }
-    return $this->api->replay();
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    $message = $data['message'];
+    $comment_id = $data['comment_id'];
+    return $this->api->replay($comment_id, $message);
   }
   public function getpost()
   {

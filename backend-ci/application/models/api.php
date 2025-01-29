@@ -194,13 +194,12 @@ class api extends CI_Model
         echo json_encode(json_decode($response, true));
     }
 
-    public function replayAction($comment_id)
+    public function replayAction($comment_id, $message)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
         if (!isset($access_token)) {
             show_error("you need to login to instagram");
         }
-        $message = $this->input->post('message');
         $url = "{$this->api_url}{$comment_id}/replies";
         $params = [
             'message' => $message,
@@ -302,21 +301,32 @@ class api extends CI_Model
         $this->db->select('id');
         $query3 = $this->db->get_where('social_accounts', array('user_id' => $user_id, 'platform' => 'Instagram'));
         $result3 = $query3->result_array();
-        $data2 = array(
-            'id' => $result3[0]['id'],
-            'user_id' => $user_id,
-            'platform' => "Instagram",
-            'account_name' => $username,
-            'access_token' => $accesstoken1
-        );
-        // Build SQL query
-        $sql = $this->db->insert_string('social_accounts', $data2) .
-            ' ON DUPLICATE KEY UPDATE 
+        if (isset($result3[0]['id'])) {
+            $data2 = array(
+                'id' => $result3[0]['id'],
+                'user_id' => $user_id,
+                'platform' => "Instagram",
+                'account_name' => $username,
+                'access_token' => $accesstoken1
+            );
+            // Build SQL query
+            $sql = $this->db->insert_string('social_accounts', $data2) .
+                ' ON DUPLICATE KEY UPDATE 
         account_name = VALUES(account_name), 
         access_token = VALUES(access_token)';
 
-        // Execute the query
-        $db_response = $this->db->query($sql);
+            // Execute the query
+            $db_response = $this->db->query($sql);
+        } else {
+            $data3 = array(
+                'user_id' => $user_id,
+                'platform' => "Instagram",
+                'account_name' => $username,
+                'access_token' => $accesstoken1
+            );
+            $this->db->insert('social_accounts', $data3);
+        }
+        // echo json_encode($data2);
         $redirect_url = "http://localhost/smm/smm-tool-frontend/smm-tool-1.5.8/index.html#/dashboard";
         redirect($redirect_url);
     }

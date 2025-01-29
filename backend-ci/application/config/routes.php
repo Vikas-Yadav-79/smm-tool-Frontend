@@ -45,7 +45,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route['register'] = 'auth/register';
 $route['login'] = 'auth/login';
 $route['update'] = 'auth/update';
-
+$route['checkConnection'] = 'auth/checkConnection';
 
 $route['facebook/login'] = 'facebook/login';
 // Route to get the page access token

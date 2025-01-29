@@ -20,6 +20,7 @@ angular.module("comment").component("comment", {
           .catch(function (error) {
             console.log("Error fetching Instagram login URL:", error);
           });
+
         $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/comments/" + $scope.id)
           .then(function (response) {
             $scope.likes = response.data.like_count;
@@ -45,6 +46,7 @@ angular.module("comment").component("comment", {
         })
           .then(function (response) {
             console.log(response.data);
+            $scope.likes = response.data.like_count;
             $scope.flag = true;
           })
           .catch(function (error) {
@@ -117,16 +119,60 @@ angular.module("comment").component("comment", {
     $scope.toggleReply = function (id) {
       $scope.cachedShowReply[id] = !$scope.cachedShowReply[id];
     }
-    this.replyToComment = function (comment) {
-      if (comment.replyText && comment.replyText.trim() !== '') {
-        comment.replies.push({
-          author: 'You',
-          text: comment.replyText.trim(),
-        });
-        comment.replyText = '';
-      }
+    $scope.commnetreplayto = "";
+    $scope.selectedToReply = {};
+    this.replyToComment = (comment) => {
+
+      console.log(comment);
+      $scope.selectedToReply = comment;
+      $scope.commnetreplayto = "@" + comment.author;
+      document.getElementById("input1").focus();
     };
+    $scope.onClickReply = function () {
+      var text = document.getElementById("input1").value;
+      if (text && text.trim() !== '') {
+        switch (this.data.platform) {
+          case "Instagram":
+            if ($scope.commnetreplayto !== "") {
+              $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/reply", {
+                message: text,
+                comment_id: $scope.selectedToReply.id
+              })
+                .then(function (response) {
+                  alert("replyed successfully");
+                })
+                .catch(function (error) {
+                  console.log("Error replying comments on instagram: ", error);
+                });
+            } else {
+
+            }
+            break;
+
+          case "Facebook":
+            if ($scope.commnetreplayto !== "") {
+              $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/facebook/replyToComment", {
+                message: text,
+                comment_id: $scope.selectedToReply.id
+              })
+                .then(function (response) {
+                  $scope.likes = response.data.like_count;
+                  $scope.flag = true;
+                })
+                .catch(function (error) {
+                  console.log("Error replying comments to facebook:", error);
+                });
+            } else {
+
+            }
+            break;
+          case "Linkedin":
+            break;
+          default:
+            break;
+        };
+      }
+    }
 
   }
-
 });
