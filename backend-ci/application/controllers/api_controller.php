@@ -77,7 +77,7 @@ class api_controller extends CI_Controller
   public function getlikes($post_id)
   {
     $userid = $this->session->userdata('user_id');
-    if (isset($userid)) {
+    if (!isset($userid)) {
       show_error("your are not authorised to access this data");
     }
     return $this->api->getlikesAction($post_id);
@@ -86,7 +86,7 @@ class api_controller extends CI_Controller
   public function comments($post_id)
   {
     $userid = $this->session->userdata('user_id');
-    if (isset($userid)) {
+    if (!isset($userid)) {
       show_error("your are not authorised to access this data");
     }
     return $this->api->commentsAction($post_id);
@@ -94,7 +94,7 @@ class api_controller extends CI_Controller
   public function replay()
   {
     $userid = $this->session->userdata('user_id');
-    if (isset($userid)) {
+    if (!isset($userid)) {
       show_error("your are not authorised to access this data");
     }
     return $this->api->replay();
@@ -102,7 +102,7 @@ class api_controller extends CI_Controller
   public function getpost()
   {
     $userid = $this->session->userdata('user_id');
-    if (isset($userid)) {
+    if (!isset($userid)) {
       show_error("your are not authorised to access this data");
     }
     return $this->api->getpostAction();
@@ -110,7 +110,7 @@ class api_controller extends CI_Controller
   public function loginDilogbox()
   {
     $userid = $this->session->userdata('user_id');
-    if (isset($userid)) {
+    if (!isset($userid)) {
       show_error("your are not authorised to access this data");
     }
     $url = 'https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=' . $this->app_id . '&redirect_uri=https://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/login&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish'; // The URL to redirect to
@@ -118,10 +118,6 @@ class api_controller extends CI_Controller
   }
   public function login()
   {
-    $userid = $this->session->userdata('user_id');
-    if (isset($userid)) {
-      show_error("your are not authorised to access this data");
-    }
     $code = $this->input->get('code');
     $this->api->login_acessToken($code, $this->app_id, $this->app_secret);
   }

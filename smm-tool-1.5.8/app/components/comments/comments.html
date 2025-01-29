@@ -1,50 +1,162 @@
 <div class="analytics-container" ng-if="flag">
   <div class="post-analytics">
-    <h2 class="post-analytics-title">Post Analytics</h2>
     <div class="post-image">
+      <button
+        class="arr"
+        style="
+          left: 2%;
+          position: absolute;
+          top: 50%;
+          border-radius: 50%;
+          display: flex;
+          width: 30px;
+          height: 30px;
+          align-items: center;
+          justify-content: center;
+        "
+        ng-click="goBackward()"
+        ng-disabled="imagePage === 0 ||  $ctrl.countImage === 0 "
+      >
+        <i class="material-icons" style="padding: 0">chevron_left</i>
+      </button>
+      <button
+        class="arr"
+        ng-disabled="imagePage === $ctrl.countImage - 1 || $ctrl.countImage === 0"
+        style="
+          right: 2%;
+          position: absolute;
+          top: 50%;
+          border-radius: 50%;
+          display: flex;
+          width: 30px;
+          height: 30px;
+          align-items: center;
+          justify-content: center;
+        "
+        ng-click="goForward()"
+      >
+        <i class="material-icons" style="padding: 0">chevron_right</i>
+      </button>
       <img
         class="post-img"
-        ng-src="{{$ctrl.data.media_url}}"
+        ng-src="{{$ctrl.data.image_urls[imagePage]}}"
         alt="Post Image"
       />
-    </div>
-    <h3 class="post-content">{{$ctrl.data.content}}</h3>
-    <div class="analytics-details">
-      <p><strong>Likes:</strong> {{likes}}</p>
-      <p><strong>Comments:</strong> {{$ctrl.analytics.comments.length}}</p>
     </div>
   </div>
 
   <div class="comments-section">
-    <h3 class="comments-title">Comments</h3>
-    <div class="comment" ng-repeat="comment in $ctrl.analytics.comments">
-      <div class="comment-content">
-        <p>
-          <strong class="author">{{comment.author}}:</strong>
-          <span class="text">{{comment.text}}</span>
-        </p>
-      </div>
-      <div class="reply-section">
-        <input
-          type="text"
-          class="reply-input"
-          ng-model="comment.replyText"
-          placeholder="Write a reply..."
-        />
-        <button class="reply-button" ng-click="$ctrl.replyToComment(comment)">
-          Reply
-        </button>
-      </div>
-      <div class="replies" ng-if="comment.replies.length > 0">
-        <h4 class="replies-title">Replies</h4>
-        <ul class="replies-list">
-          <li class="reply" ng-repeat="reply in comment.replies">
-            <p>
-              <strong class="reply-author">{{reply.author}}:</strong>
-              <span class="reply-text">{{reply.text}}</span>
+    <div style="border-bottom: 1px solid">
+      <h3 class="comments-title">Comments</h3>
+      <div style="padding: 16px; overflow-y: scroll; height: 350px">
+        <div class="comment" ng-repeat="comment in $ctrl.analytics.comments">
+          <div class="comment-content">
+            <p style="margin: 0">
+              <strong class="author">{{comment.author}}:</strong>
+              <span class="text">{{comment.text}}</span>
             </p>
-          </li>
-        </ul>
+          </div>
+          <div class="reply-section">
+            <button
+              class="reply-button"
+              ng-click="$ctrl.replyToComment(comment)"
+            >
+              Reply
+            </button>
+            <button
+              style="
+                color: #676666c2;
+                padding: 0 0 0 10px;
+                background: transparent;
+                border: none;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+              "
+              ng-click="toggleReply(comment.comment_id)"
+              ng-if="comment.replies.length > 0"
+            >
+              <div
+                style="border: 1px solid; margin: 0 10px 0 0; width: 26px"
+              ></div>
+              <span ng-if="!showReply(comment.comment_id)" style="padding: 0"
+                >See all {{comment.replies.length}} replies
+              </span>
+              <span ng-if="showReply(comment.comment_id)" style="padding: 0"
+                >Hide all replies</span
+              >
+            </button>
+          </div>
+          <div class="replies" ng-if="showReply(comment.comment_id)">
+            <ul class="replies-list">
+              <li class="reply" ng-repeat="reply in comment.replies">
+                <p style="margin: 0">
+                  <strong class="reply-author">{{reply.author}}:</strong>
+                  <span class="reply-text">{{reply.text}}</span>
+                </p>
+                <div class="reply-section">
+                  <button
+                    class="reply-button"
+                    ng-click="$ctrl.replyToComment(comment)"
+                  >
+                    Reply
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        height: 200px;
+        flex-direction: column;
+        justify-content: space-between;
+      "
+    >
+      <div style="gap: 10px; display: flex; padding: 10px; flex-direction: row">
+        <spam
+          style="
+            display: flex;
+            width: fit-content;
+            flex-direction: column;
+            align-items: center;
+          "
+          ng-click="$ctrl.replyToComment(comment)"
+        >
+          <i class="material-icons" style="padding: 0">favorite</i>
+          1 like
+        </spam>
+        <span
+          style="
+            display: flex;
+            width: fit-content;
+            flex-direction: column;
+            align-items: center;
+          "
+          ng-click="$ctrl.replyToComment(comment)"
+        >
+          <i class="material-icons" style="padding: 0">mode_comment</i>
+          1 comment
+        </span>
+      </div>
+      <div style="padding: 1px 15px; display: flex">
+        <input
+          class="add_comment"
+          style="
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            padding: 10px;
+            width: 100%;
+          "
+          placeholder="Add a comment..."
+          type="text"
+        />
+        <button class="mdl-button">Post</button>
       </div>
     </div>
   </div>

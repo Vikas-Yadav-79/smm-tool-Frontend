@@ -62,7 +62,7 @@ angular.module('table2').component('table2', {
     // }
     $scope.cachedDates = {};
     $scope.checkDate = function (date, id) {
-      console.log($scope.cachedDates);
+
       if ($scope.cachedDates[id] !== undefined) {
         return $scope.cachedDates[id];
       }

@@ -159,9 +159,8 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
             if (response.authResponse) {
                 // Successfully logged in, get the access token
                 var accessToken = response.authResponse.accessToken;
-
                 // Send the access token to the backend (CodeIgniter)
-                $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/facebook/login')
+                $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/facebook/login', { access_token: accessToken })
                     .then(function (response) {
                         console.log('Logged in successfully');
                         // Handle the response, such as storing the token or redirecting
@@ -180,7 +179,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     // ohm's sidebar implementation
     $scope.items = [];
     $scope.data = [];
-    $scope.selectedItem = "Scheduled";
+    $scope.selectedTable = "scheduled";
     $scope.flag = false;
     $scope.user_id = localStorage.getItem('user_id');
     $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/posts/getposts/" + $scope.user_id)
@@ -228,7 +227,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     $scope.connectHendal = function (action) {
 
         if (action === 'Facebook') {
-
+            $scope.facebookLogin();
         } else if (action === 'Instagram') {
             var form = document.createElement('form');
             form.method = 'POST';
@@ -239,6 +238,25 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         } else if (action === 'Linkedin') {
 
         }
+    }
+
+    $scope.closeDialog = function () {
+        $scope.isDialogOpen2 = false;
+    }
+
+    $scope.isDialogOpen2 = false;
+    $scope.clearFilter = function () {
+        console.log('clear filter');
+        $scope.changeTabledata($scope.selectedTable);
+        $scope.filter = {
+            min: 0,
+            max: 70,
+            selectedOption: "",
+            selectedType: "All",
+            startDate: "",
+            endDate: "",
+
+        };
     }
     $scope.onApplyFilter = function () {
 
@@ -278,7 +296,6 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     $scope.selectedTable = 'Scheduled';
 
     $scope.restTable = function () {
-        console.log($scope.selectedTable);
         $scope.changeTabledata($scope.selectedTable);
     };
 
@@ -295,23 +312,18 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         $scope.items = $filtered_data; // Update the items displayed in the table 
         $scope.tableLength = Math.ceil($scope.items.length / 2);
     };
-
+    $scope.countImage = 0;
     $scope.$on('childAction', function (event, data) {
         if (data.action === 'edit') {
             alert(`Editing item: ${data.item.serialNo}`);
         } else if (data.action === 'analyze') {
-            var dialog = document.querySelector('dialog');
             $scope.selectedItem = data.item;
-            dialog.showModal();
+            $scope.countImage = data.item.image_urls.length;
+            $scope.isDialogOpen2 = true;
         } else if (data.action === 'delete') {
             alert(`Deleting item: ${data.item.serialNo}`);
         }
     });
-    $scope.closeDialog = function closeDialog() {
-        var dialog = document.querySelector('dialog');
-        $scope.selectedItem = null;
-        dialog.close();
-    }
 
 
 

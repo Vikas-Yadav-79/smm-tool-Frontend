@@ -19,7 +19,7 @@ class api extends CI_Model
     public function postSingle($image_url, $caption, $media_type, $collaborators, $user_tags)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        if (isset($access_token)) {
+        if (!isset($access_token)) {
             show_error("you need to login to instagram");
         }
         if ($media_type[0] == 'IMAGE') {
@@ -84,7 +84,7 @@ class api extends CI_Model
     public function postMultiple($image_url, $caption, $media_type, $collaborators, $user_tags)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        if (isset($access_token)) {
+        if (!isset($access_token)) {
             show_error("you need to login to instagram");
         }
         $container_id = array();
@@ -166,7 +166,7 @@ class api extends CI_Model
     public function getlikesAction($post_id)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        if (isset($access_token)) {
+        if (!isset($access_token)) {
             show_error("you need to login to instagram");
         }
         $url = "{$this->api_url}{$post_id}?fields=like_count&access_token={$access_token}";
@@ -180,10 +180,11 @@ class api extends CI_Model
     public function commentsAction($post_id)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        if (isset($access_token)) {
+        if (!isset($access_token)) {
             show_error("you need to login to instagram");
         }
         $url = "{$this->api_url}{$post_id}/comments?access_token={$access_token}";
+        echo $url;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -196,7 +197,7 @@ class api extends CI_Model
     public function replayAction($comment_id)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        if (isset($access_token)) {
+        if (!isset($access_token)) {
             show_error("you need to login to instagram");
         }
         $message = $this->input->post('message');
@@ -218,7 +219,7 @@ class api extends CI_Model
     public function getpostAction()
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        if (isset($access_token)) {
+        if (!isset($access_token)) {
             show_error("you need to login to instagram");
         }
         $url = "{$this->api_url}me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url&access_token={$access_token}";
@@ -278,7 +279,7 @@ class api extends CI_Model
         curl_close($ch2);
         $this->session->set_userdata('Instagram_accessToken', $accesstoken1);
         $fields = 'username';
-        $url = "https://graph.facebook.com/v14.0/me?fields={$fields}&access_token={$accesstoken1}";
+        $url = "https://graph.instagram.com/v14.0/me?fields={$fields}&access_token={$accesstoken1}";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -298,13 +299,24 @@ class api extends CI_Model
             show_error(json_encode(['status' => 'error', 'message' => 'Failed to fetch user data']));
         }
         $user_id = $this->session->userdata('user_id');
+        $this->db->select('id');
+        $query3 = $this->db->get_where('social_accounts', array('user_id' => $user_id, 'platform' => 'Instagram'));
+        $result3 = $query3->result_array();
         $data2 = array(
+            'id' => $result3[0]['id'],
             'user_id' => $user_id,
             'platform' => "Instagram",
             'account_name' => $username,
             'access_token' => $accesstoken1
         );
-        $db_response = $this->db->insert('social_accounts', $data2);
+        // Build SQL query
+        $sql = $this->db->insert_string('social_accounts', $data2) .
+            ' ON DUPLICATE KEY UPDATE 
+        account_name = VALUES(account_name), 
+        access_token = VALUES(access_token)';
+
+        // Execute the query
+        $db_response = $this->db->query($sql);
         $redirect_url = "http://localhost/smm/smm-tool-frontend/smm-tool-1.5.8/index.html#/dashboard";
         redirect($redirect_url);
     }

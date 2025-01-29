@@ -9,6 +9,7 @@ angular.module('subnavbar').component('subnavbar', {
     filter: '=',
     onSearch: '&',
     onRest: '&',
+    onClearFilter: '&',
   },
 
   controller: function ($scope) {
@@ -50,6 +51,13 @@ angular.module('subnavbar').component('subnavbar', {
         document.getElementById(v).classList.add("hide");
       }
 
+    }
+    $scope.clearFilter = () => {
+      if (this.onClearFilter) {
+        this.onClearFilter();
+        $scope.show();
+      }
+      $scope.filter = this.filter;
     }
     this.applyFilter = () => {
       this.filter = $scope.filter;
