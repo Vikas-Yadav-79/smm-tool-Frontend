@@ -1,4 +1,3 @@
-
 <div class="dashboard-container">
   <sidebar on-connect="connectHendal(action)"></sidebar>
   <div style="width: -webkit-fill-available">
@@ -9,26 +8,26 @@
       filter="filter"
       on-search="filterData(query)"
       on-rest="restTable()"
+      on-clear-filter="clearFilter()"
     >
       ></subnavbar
     >
     <table2
       ng-if="flag"
+      selectedtab="selectedTable"
       data="selectedTable"
       count="tableLength"
       items="items"
     ></table2>
   </div>
-  <dialog class="mdl-dialog dialog-analyze">
-    <comment ng-if="selectedItem" data="selectedItem"></comment>
-    <div class="mdl-dialog__actions">
-      <button
-        type="button"
-        class="mdl-button close-btn"
-        ng-click="closeDialog()"
-      >
-        Close
-      </button>
-    </div>
-  </dialog>
+  <div class="dialog" ng-class="{ show: isDialogOpen2 }">
+    <span class="dialog-close" ng-click="closeDialog()"
+      ><i class="material-icons">close</i></span
+    >
+    <comment
+      ng-if="selectedItem"
+      countImage="countImage"
+      data="selectedItem"
+    ></comment>
+  </div>
 </div>

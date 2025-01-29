@@ -2,11 +2,15 @@
 
 class api_controller extends CI_Controller
 {
-  private $app_id = $_ENV['INSTAGRAM_APP_ID'];
-  private $app_secret = $_ENV['INSTAGRAM_APP_SECRET'];
+  private $app_id;
+  private $app_secret;
 
   public function __construct()
   {
+    echo getenv("INSTAGRAM_APP_ID");
+    $this->app_id = getenv("INSTAGRAM_APP_ID");
+    $this->app_secret = getenv("INSTAGRAM_APP_SECRET");
+
     parent::__construct();
     $this->enableCors();
     $this->load->helper('url');
@@ -31,6 +35,10 @@ class api_controller extends CI_Controller
 
   public function post()
   {
+    $userid = $this->session->userdata('user_id');
+    if (isset($userid)) {
+      show_error("your are not authorised to access this data");
+    }
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
     $image_url = $data['image_url'];
@@ -68,23 +76,43 @@ class api_controller extends CI_Controller
   }
   public function getlikes($post_id)
   {
+    $userid = $this->session->userdata('user_id');
+    if (!isset($userid)) {
+      show_error("your are not authorised to access this data");
+    }
     return $this->api->getlikesAction($post_id);
   }
 
   public function comments($post_id)
   {
+    $userid = $this->session->userdata('user_id');
+    if (!isset($userid)) {
+      show_error("your are not authorised to access this data");
+    }
     return $this->api->commentsAction($post_id);
   }
   public function replay()
   {
+    $userid = $this->session->userdata('user_id');
+    if (!isset($userid)) {
+      show_error("your are not authorised to access this data");
+    }
     return $this->api->replay();
   }
   public function getpost()
   {
+    $userid = $this->session->userdata('user_id');
+    if (!isset($userid)) {
+      show_error("your are not authorised to access this data");
+    }
     return $this->api->getpostAction();
   }
   public function loginDilogbox()
   {
+    $userid = $this->session->userdata('user_id');
+    if (!isset($userid)) {
+      show_error("your are not authorised to access this data");
+    }
     $url = 'https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=' . $this->app_id . '&redirect_uri=https://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/login&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish'; // The URL to redirect to
     redirect($url);
   }

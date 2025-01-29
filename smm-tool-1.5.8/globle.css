@@ -279,6 +279,7 @@ th {
 }
 
 .analytics-container {
+  display: flex;
   padding: 20px;
   font-family: Arial, sans-serif;
 }
@@ -316,11 +317,21 @@ th {
 .post-analytics {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 20px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  display: flex;
+  justify-items: center;
+  align-items: center;
   max-width: 700px;
+  height: 650px;
   margin: 30px auto;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.arr:disabled {
+  display: none;
 }
 
 .post-analytics-title {
@@ -333,20 +344,17 @@ th {
 }
 
 .post-image {
-
+  position: relative;
   text-align: center;
-  margin-bottom: 20px;
 }
 
 .post-img {
-  width: 533px;
+  width: 650px;
   height: 406px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* max-width: 100%; */
-  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -445,29 +453,36 @@ th {
 .comments-section {
   font-family: Arial, sans-serif;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 20px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
   max-width: 600px;
+  height: 650px;
   margin: auto;
   background-color: #f9f9f9;
+
 }
 
 .comments-title {
   font-size: 1.5em;
+  margin-top: 0px;
   margin-bottom: 20px;
+  padding: 20px;
+  position: statics;
   color: #333;
   border-bottom: 2px solid #007bff;
   padding-bottom: 5px;
 }
 
 .comment {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   padding-bottom: 15px;
-  border-bottom: 1px solid #eaeaea;
+
 }
 
 .comment-content {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .author {
@@ -482,12 +497,15 @@ th {
 .reply-section {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  padding: 0px 0 0 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  /* margin-top: 10px; */
 }
 
 .reply-input {
   flex-grow: 1;
-  padding: 8px;
+  /* padding: 8px; */
   font-size: 1em;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -499,11 +517,16 @@ th {
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
 }
 
+.add_comment:focus {
+  border: none !important;
+  outline: none;
+}
+
 .reply-button {
-  padding: 8px 16px;
+  /* padding: 8px 16px; */
   font-size: 1em;
-  color: white;
-  background-color: #007bff;
+  /* color: white; */
+  background-color: transparent;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -511,7 +534,7 @@ th {
 }
 
 .reply-button:hover {
-  background-color: #0056b3;
+  /* background-color: #0056b3; */
 }
 
 .replies {
@@ -555,6 +578,7 @@ th {
 .main-content {
   width: 100%;
   margin-left: 0px;
+  margin-bottom: 24px;
 }
 
 .sel {
@@ -602,7 +626,6 @@ th {
   border-right-width: 0px;
   border-top-width: 0px;
   border-bottom-width: 3px;
-  margin: 10px;
 }
 
 .container1 {
@@ -800,12 +823,15 @@ select {
   padding: 1rem;
   font-size: 0.875rem;
   color: #374151;
+  border-radius: .5rem;
+  border: 1px solid #9c9c9c7a;
+  background: white;
 }
 
 .table-dropbox {
+  translate: 155px -155px;
   position: absolute;
   z-index: 10;
-  background-color: white;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: fit-content;
@@ -827,43 +853,6 @@ select {
   padding: 5px;
 }
 
-.table_cont {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  align-items: center;
-}
-
-.pagination-controls button {
-  padding: 8px 16px;
-  margin: 0 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 5px;
-}
-
-
-
-.pagination-controls button:disabled {
-  background-color: #ddd;
-  color: #888;
-  cursor: not-allowed;
-  border: 1px solid #ccc;
-}
-
-.pagination-controls button:disabled:hover {
-  background-color: #ddd;
-}
-
 .close-btn {
   color: white !important;
   background-color: #007bff !important;
@@ -874,4 +863,12 @@ select {
 
 .mdl-dialog__actions {
   padding: 8px 20px 8px 24px !important;
+}
+
+.no-back:hover {
+  background: none !important;
+}
+
+#filter-li2::marker {
+  content: none;
 }

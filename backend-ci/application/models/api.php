@@ -19,8 +19,8 @@ class api extends CI_Model
     public function postSingle($image_url, $caption, $media_type, $collaborators, $user_tags)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        if (isset($access_token)) {
-            show_error("need to login");
+        if (!isset($access_token)) {
+            show_error("you need to login to instagram");
         }
         if ($media_type[0] == 'IMAGE') {
             $params = [
@@ -84,9 +84,8 @@ class api extends CI_Model
     public function postMultiple($image_url, $caption, $media_type, $collaborators, $user_tags)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        // $access_token = "IGAATpC2OpNHZABZAE9BQmFkX2Q0ejEzOXlETVlvN2JZAMmEzaTJqMjFWM2U5YlM0eHdPN3ZA1QlBWSW1IY0Iza1hKVC1haEEzbml1ckxrU2N3VWFxQXNuYnpLYllHNGJsSDhuZAnhlSHl5UFNsQWxoc3JDekZA3";
-        if (isset($access_token)) {
-            show_error("need to login");
+        if (!isset($access_token)) {
+            show_error("you need to login to instagram");
         }
         $container_id = array();
         for ($x = 0; $x < count($image_url); $x++) {
@@ -167,9 +166,8 @@ class api extends CI_Model
     public function getlikesAction($post_id)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        // $access_token = "IGAATpC2OpNHZABZAE9BQmFkX2Q0ejEzOXlETVlvN2JZAMmEzaTJqMjFWM2U5YlM0eHdPN3ZA1QlBWSW1IY0Iza1hKVC1haEEzbml1ckxrU2N3VWFxQXNuYnpLYllHNGJsSDhuZAnhlSHl5UFNsQWxoc3JDekZA3";
-        if (isset($access_token)) {
-            show_error("need to login");
+        if (!isset($access_token)) {
+            show_error("you need to login to instagram");
         }
         $url = "{$this->api_url}{$post_id}?fields=like_count&access_token={$access_token}";
         $ch = curl_init($url);
@@ -182,13 +180,15 @@ class api extends CI_Model
     public function commentsAction($post_id)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        // $access_token = "IGAATpC2OpNHZABZAE9BQmFkX2Q0ejEzOXlETVlvN2JZAMmEzaTJqMjFWM2U5YlM0eHdPN3ZA1QlBWSW1IY0Iza1hKVC1haEEzbml1ckxrU2N3VWFxQXNuYnpLYllHNGJsSDhuZAnhlSHl5UFNsQWxoc3JDekZA3";
-        if (isset($access_token)) {
-            show_error("need to login");
+        if (!isset($access_token)) {
+            show_error("you need to login to instagram");
         }
         $url = "{$this->api_url}{$post_id}/comments?access_token={$access_token}";
-        $ch = curl_init($url);
+        echo $url;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         $response = curl_exec($ch);
         curl_close($ch);
         echo json_encode(json_decode($response, true));
@@ -197,9 +197,8 @@ class api extends CI_Model
     public function replayAction($comment_id)
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        // $access_token = "IGAATpC2OpNHZABZAE9BQmFkX2Q0ejEzOXlETVlvN2JZAMmEzaTJqMjFWM2U5YlM0eHdPN3ZA1QlBWSW1IY0Iza1hKVC1haEEzbml1ckxrU2N3VWFxQXNuYnpLYllHNGJsSDhuZAnhlSHl5UFNsQWxoc3JDekZA3";
-        if (isset($access_token)) {
-            show_error("need to login");
+        if (!isset($access_token)) {
+            show_error("you need to login to instagram");
         }
         $message = $this->input->post('message');
         $url = "{$this->api_url}{$comment_id}/replies";
@@ -220,9 +219,8 @@ class api extends CI_Model
     public function getpostAction()
     {
         $access_token = $this->session->userdata('Instagram_accessToken');
-        // $access_token = "IGAATpC2OpNHZABZAE9BQmFkX2Q0ejEzOXlETVlvN2JZAMmEzaTJqMjFWM2U5YlM0eHdPN3ZA1QlBWSW1IY0Iza1hKVC1haEEzbml1ckxrU2N3VWFxQXNuYnpLYllHNGJsSDhuZAnhlSHl5UFNsQWxoc3JDekZA3";
-        if (isset($access_token)) {
-            show_error("need to login");
+        if (!isset($access_token)) {
+            show_error("you need to login to instagram");
         }
         $url = "{$this->api_url}me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url&access_token={$access_token}";
         $ch = curl_init($url);
@@ -233,8 +231,7 @@ class api extends CI_Model
         if (isset($result['data']) && !empty($result['data'])) {
             echo json_encode($result['data']);
         } else {
-            echo json_encode($result);
-            // show_error('No posts found.');
+            show_error('No posts found.');
         }
     }
 
@@ -281,17 +278,73 @@ class api extends CI_Model
         }
         curl_close($ch2);
         $this->session->set_userdata('Instagram_accessToken', $accesstoken1);
-        var_dump($this->session->all_userdata());
+        $fields = 'username';
+        $url = "https://graph.instagram.com/v14.0/me?fields={$fields}&access_token={$accesstoken1}";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            $error_msg = curl_error($ch);
+            curl_close($ch);
+            show_error(json_encode(['error' => 'cURL Error: ' . $error_msg]));
+        }
+        curl_close($ch);
+        $response_data = json_decode($response, true);
+        if (isset($response_data['username'])) {
+            $username = $response_data['username'];
+        } else {
+            show_error(json_encode(['status' => 'error', 'message' => 'Failed to fetch user data']));
+        }
         $user_id = $this->session->userdata('user_id');
+        $this->db->select('id');
+        $query3 = $this->db->get_where('social_accounts', array('user_id' => $user_id, 'platform' => 'Instagram'));
+        $result3 = $query3->result_array();
         $data2 = array(
+            'id' => $result3[0]['id'],
             'user_id' => $user_id,
             'platform' => "Instagram",
+            'account_name' => $username,
             'access_token' => $accesstoken1
         );
-        $db_response = $this->db->insert('social_accounts', $data2);
-        $redirect_url = "http://127.0.0.1:8081/#/dashboard";
+        // Build SQL query
+        $sql = $this->db->insert_string('social_accounts', $data2) .
+            ' ON DUPLICATE KEY UPDATE 
+        account_name = VALUES(account_name), 
+        access_token = VALUES(access_token)';
+
+        // Execute the query
+        $db_response = $this->db->query($sql);
+        $redirect_url = "http://localhost/smm/smm-tool-frontend/smm-tool-1.5.8/index.html#/dashboard";
         redirect($redirect_url);
     }
+
+    public function check_access_token($long_lived_access_token)
+    {
+        $url = "https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=" . urlencode($long_lived_access_token);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            $error_msg = curl_error($ch);
+            curl_close($ch);
+            log_message('error', 'cURL error: ' . $error_msg); // Log error
+            return ['error' => 'cURL Error: ' . $error_msg];
+        }
+        curl_close($ch);
+        $response_data = json_decode($response, true);
+        if (isset($response_data['access_token'])) {
+            return ['status' => 'success', 'access_token' => $response_data['access_token']];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to refresh token'];
+        }
+    }
+
     public function validate_user_tags($user_tags)
     {
         if (!is_array($user_tags)) {

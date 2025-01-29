@@ -16,7 +16,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     $scope.socialAccounts = []; // To store the social media accounts
 
     // Function to fetch social media accounts
-    $scope.getSocialMediaAccounts = function() {
+    $scope.getSocialMediaAccounts = function () {
         // Get the user ID from localStorage or session
         var userId = localStorage.getItem('user_id');
 
@@ -29,21 +29,21 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         $http.get('http://localhost/CodeIgniter-2.2.0/index.php/facebook/getSocialMediaAccounts', {
             params: { user_id: userId }
         })
-        .then(function(response) {
-            if (response.data.status === 'success') {
-                // Successfully retrieved the accounts, store them in the scope variable
-                $scope.socialAccounts = response.data.accounts;
-                console.log('Social media accounts:', $scope.socialAccounts);
-            } else {
-                alert('Error fetching accounts: ' + response.data.message);
-            }
-        }, function(error) {
-            console.error('Error:', error);
-            alert('An error occurred while fetching social media accounts');
-        });
+            .then(function (response) {
+                if (response.data.status === 'success') {
+                    // Successfully retrieved the accounts, store them in the scope variable
+                    $scope.socialAccounts = response.data.accounts;
+                    console.log('Social media accounts:', $scope.socialAccounts);
+                } else {
+                    alert('Error fetching accounts: ' + response.data.message);
+                }
+            }, function (error) {
+                console.error('Error:', error);
+                alert('An error occurred while fetching social media accounts');
+            });
     };
 
-    $scope.postToFacebook = function() {
+    $scope.postToFacebook = function () {
         if (!$scope.pageId || !$scope.accessToken) {
             alert('Page ID and Access Token are required');
             return;
@@ -56,7 +56,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         };
 
         $http.post('https://localhost/CodeIgniter-2.2.0/index.php/facebook/postMessage', payload)
-            .then(function(response) {
+            .then(function (response) {
                 if (response.data.status === 'success') {
                     alert('Post published successfully!');
                     console.log('Response:', response.data.response);
@@ -64,15 +64,15 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
                     alert('Error posting to Facebook: ' + JSON.stringify(response.data.response));
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error:', error);
                 alert('An error occurred while posting to Facebook.');
             });
     };
 
 
-    $scope.register = function() {
-        if ($scope.registerForm.$valid) { 
+    $scope.register = function () {
+        if ($scope.registerForm.$valid) {
             console.log('Registering with:', $scope.registerData);
             $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/register', $scope.registerData)
                 .then(function (response) {
@@ -96,7 +96,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     };
 
 
-    $scope.login = function() {
+    $scope.login = function () {
         if ($scope.loginForm.$valid) {
             console.log('Logging in with:', $scope.loginData);
             $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/login', $scope.loginData)
@@ -112,7 +112,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
                     }
                 }, function (error) {
                     console.log('Error:', error);
-                    alert('An error occurred while logging in');
+                    alert('An error occurred while logging in ');
                 });
         } else {
             alert('Login form is invalid');
@@ -122,10 +122,9 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     $scope.update = function () {
         if ($scope.updateForm.$valid) {
             console.log('Updating user with:', $scope.updateData);
-             if($scope.updateData.password === ''){
-                 $scope.updateData.password = ;
-
-             }
+            if ($scope.updateData.password === '') {
+                delete $scope.updateData.password;
+            }
             $http.put('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/update', $scope.updateData)
 
                 .then(function (response) {
@@ -144,7 +143,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         }
     };
 
-    $scope.goToProfileUpdate = function() {
+    $scope.goToProfileUpdate = function () {
         alert("Hello");
 
         $location.path('/profile');
@@ -160,9 +159,8 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
             if (response.authResponse) {
                 // Successfully logged in, get the access token
                 var accessToken = response.authResponse.accessToken;
-
                 // Send the access token to the backend (CodeIgniter)
-                $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/facebook/login')
+                $http.post('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/facebook/login', { access_token: accessToken })
                     .then(function (response) {
                         console.log('Logged in successfully');
                         // Handle the response, such as storing the token or redirecting
@@ -181,28 +179,30 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     // ohm's sidebar implementation
     $scope.items = [];
     $scope.data = [];
-    $scope.selectedItem = "Scheduled";
+    $scope.selectedTable = "scheduled";
     $scope.flag = false;
     $scope.user_id = localStorage.getItem('user_id');
     $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/posts/getposts/" + $scope.user_id)
         .then(function (response) {
             $scope.data = response.data;
             $scope.flag = true;
+            $scope.data.forEach(post => {
+                const dateObj = new Date(post.published_time);
+                post.published_time = dateObj;
+            });
             $scope.items = $scope.data;
-            console.log(response.data);
             /// to add filter of facebook instagram etc
 
 
 
             // filter to inistial selected item 
             $scope.items = $scope.items.filter((item) => item.status === 'scheduled');
-            $scope.tableLength = Math.ceil($scope.items.length / 4);
+            $scope.tableLength = Math.ceil($scope.items.length / 2);
         })
         .catch(function (error) {
             console.error("Error fetching Instagram login URL:", error);
         });
 
-    $scope.filteredItems = [...$scope.items];
     $scope.filteredSearch = [...$scope.items];
     $scope.filter = {
         min: 0,
@@ -215,22 +215,19 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     };
 
     $scope.filterData = (query) => {
-        console.log(query);
         const searchQuery = query.toString().toLowerCase();
-        console.log(searchQuery);
         $scope.filteredData = $scope.items.filter(item => {
             const content = item.content ? item.content.toString().toLowerCase() : '';
             return content.includes(searchQuery);
         });
-        console.log($scope.$filteredData);
         $scope.items = $scope.filteredData;
-        $scope.tableLength = Math.ceil($scope.items.length / 4);
+        $scope.tableLength = Math.ceil($scope.items.length / 2);
     };
 
     $scope.connectHendal = function (action) {
 
         if (action === 'Facebook') {
-
+            $scope.facebookLogin();
         } else if (action === 'Instagram') {
             var form = document.createElement('form');
             form.method = 'POST';
@@ -242,7 +239,28 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
 
         }
     }
+
+    $scope.closeDialog = function () {
+        $scope.isDialogOpen2 = false;
+    }
+
+    $scope.isDialogOpen2 = false;
+    $scope.clearFilter = function () {
+        console.log('clear filter');
+        $scope.changeTabledata($scope.selectedTable);
+        $scope.filter = {
+            min: 0,
+            max: 70,
+            selectedOption: "",
+            selectedType: "All",
+            startDate: "",
+            endDate: "",
+
+        };
+    }
     $scope.onApplyFilter = function () {
+
+        $scope.filteredItems = [...$scope.items];
         const { min, max, selectedOption, selectedType, startDate, endDate } = $scope.filter;
         if (selectedType !== 'All') {
             console.log('Selected type:', selectedType);
@@ -260,18 +278,24 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
                 return withinDateRange;
             });
         }
-        if (selectedOption === 'asc') {
-            $scope.filteredItems.sort((a, b) => new Date(a.time) - new Date(b.time));
-        } else if (selectedOption === 'desc') {
-            $scope.filteredItems.sort((a, b) => new Date(b.time) - new Date(a.time));
+        if ($scope.selectedTable === "Scheduled") {
+            if (selectedOption === 'asc') {
+                $scope.filteredItems.sort((a, b) => new Date(a.schedule_time) - new Date(b.schedule_time));
+            } else if (selectedOption === 'desc') {
+                $scope.filteredItems.sort((a, b) => new Date(b.schedule_time) - new Date(a.schedule_time));
+            }
+        } else if ($scope.selectedTable === "Published") {
+            if (selectedOption === 'asc') {
+                $scope.filteredItems.sort((a, b) => new Date(a.published_time) - new Date(b.published_time));
+            } else if (selectedOption === 'desc') {
+                $scope.filteredItems.sort((a, b) => new Date(b.published_time) - new Date(a.published_time));
+            }
         }
-        console.log($scope.filteredItems);
         $scope.items = $scope.filteredItems;
     };
     $scope.selectedTable = 'Scheduled';
 
     $scope.restTable = function () {
-        console.log($scope.selectedTable);
         $scope.changeTabledata($scope.selectedTable);
     };
 
@@ -286,25 +310,22 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
             $filtered_data = $filtered_data.filter((item) => item.status === 'draft');
         }
         $scope.items = $filtered_data; // Update the items displayed in the table 
-        $scope.tableLength = Math.ceil($scope.items.length / 4);
+        $scope.tableLength = Math.ceil($scope.items.length / 2);
     };
-
+    $scope.countImage = 0;
     $scope.$on('childAction', function (event, data) {
         if (data.action === 'edit') {
             alert(`Editing item: ${data.item.serialNo}`);
         } else if (data.action === 'analyze') {
-            var dialog = document.querySelector('dialog');
             $scope.selectedItem = data.item;
-            dialog.showModal();
+            $scope.countImage = data.item.image_urls.length;
+            $scope.isDialogOpen2 = true;
         } else if (data.action === 'delete') {
             alert(`Deleting item: ${data.item.serialNo}`);
         }
     });
-    $scope.closeDialog = function closeDialog() {
-        var dialog = document.querySelector('dialog');
-        $scope.selectedItem = null;
-        dialog.close();
-    }
+
+
 
 });
 // pages_read_user_engagement

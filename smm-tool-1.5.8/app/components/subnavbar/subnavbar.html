@@ -31,10 +31,11 @@
           style="
             width: -webkit-fill-available;
             height: -webkit-fill-available;
-            padding: 15px 0;
+            padding: 10px 0;
           "
         >
           <label
+            style="top: 10px"
             class="mdl-button mdl-js-button mdl-button--icon"
             for="sample6"
           >
@@ -52,9 +53,9 @@
           </div>
           <button
             ng-if="showcross"
-            class="mdl-button mdl-js-button mdl-button--icon"
+            class="mdl-button mdl-js-button mdl-button--icon no-back"
             ng-click="redoTable()"
-            style="left: 188px; top: 13px"
+            style="left: 188px; top: 8px"
           >
             <i class="material-icons">close</i>
           </button>
@@ -65,7 +66,7 @@
           ng-click="show()"
           class="mdl-button mdl-js-button mdl-button--icon"
         >
-          <i class="material-icons">more_vert</i>
+          <i class="material-icons">filter_alt</i>
         </button>
         <div class="hide filter-dropbox" id="filter">
           <ul for="demo-menu-lower-right">
@@ -155,13 +156,33 @@
                 />
               </div>
             </li>
-            <li class="filter-li">
-              <button
-                style="font: caption; padding: 10px; border: groove"
-                ng-click="$ctrl.applyFilter()"
-              >
-                Apply
-              </button>
+            <li class="filter-li" id="filter-li2">
+              <div style="display: flex; justify-content: space-between">
+                <button
+                  style="
+                    height: 25px;
+                    position: unset;
+                    font: caption;
+                    padding: 0 10px;
+                    border: 1px solid;
+                  "
+                  ng-click="$ctrl.applyFilter()"
+                >
+                  Apply
+                </button>
+                <button
+                  style="
+                    height: 25px;
+                    position: unset;
+                    font: caption;
+                    padding: 0 10px;
+                    border: 1px solid;
+                  "
+                  ng-click="clearFilter()"
+                >
+                  Clear
+                </button>
+              </div>
             </li>
           </ul>
         </div>

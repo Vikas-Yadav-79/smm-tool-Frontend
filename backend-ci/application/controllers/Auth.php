@@ -5,6 +5,7 @@ class Auth extends CI_Controller
     {
         parent::__construct();
         $this->load->model('User_model');
+        $this->load->model('api');
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');  // Allow all origins
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');  // Allow these methods
@@ -20,7 +21,6 @@ class Auth extends CI_Controller
         if ($this->User_model->register($data)) {
             // Try to log the user in after registration
             $user = $this->User_model->login($data['email'], $plainPassword);
-
             if ($user) {
                 // Set session data if login is successful
                 $this->session->set_userdata('user_id', $user->id);
@@ -41,8 +41,10 @@ class Auth extends CI_Controller
     {
 
         $data = json_decode(file_get_contents('php://input'), true);
-        // var_dump($data);die();   
+        // var_dump($data);
+        // die();   
         $user = $this->User_model->login($data['email'], $data['password']);
+
         if ($user) {
             $this->session->set_userdata('user_id', $user->id);
             $this->session->set_userdata('user_email', $user->email);
@@ -52,7 +54,17 @@ class Auth extends CI_Controller
             if (count($result) !== 0) {
                 foreach ($result as $row) {
                     if (isset($row['access_token'])) {
-                        $this->session->set_userdata($row['platform'] . '_accessToken', $row['access_token']);
+                        if ($row['platform'] === 'Instagram') {
+                            $result2 =  $this->api->check_access_token($row['access_token']);
+                            if ($result2['status'] == 'success') {
+                                $access_token =  $result2['access_token'];
+                            } else {
+                                $access_token = $row['access_token'];
+                            }
+                            $this->session->set_userdata($row['platform'] . '_accessToken', $access_token);
+                        } else {
+                            $this->session->set_userdata($row['platform'] . '_accessToken', $row['access_token']);
+                        }
                     }
                 }
             }

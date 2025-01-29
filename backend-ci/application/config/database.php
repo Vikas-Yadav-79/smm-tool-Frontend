@@ -50,9 +50,9 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = isset($_ENV['DB_HOST']) ? $_ENV['DB_HOST'] : 'localhost';
 $db['default']['port'] = '3307';
-$db['default']['username'] = $_ENV['DB_USER'];
-$db['default']['password'] = $_ENV['DB_PASS'];
-$db['default']['database'] = $_ENV['DB_NAME'];
+$db['default']['username'] = getenv('DB_USER');
+$db['default']['password'] = getenv('DB_PASS');
+$db['default']['database'] = getenv('DB_NAME');
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
