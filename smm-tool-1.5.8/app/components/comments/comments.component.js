@@ -9,7 +9,6 @@ angular.module("comment").component("comment", {
   controller: function ($scope, $http) {
     $scope.id = this.data.platform_post_ids;
     $scope.flag = true;
-    console.log(this.data);
     switch (this.data.platform) {
       case "Instagram":
         $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/getlikes/" + $scope.id)
@@ -23,8 +22,23 @@ angular.module("comment").component("comment", {
 
         $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/instagram/comments/" + $scope.id)
           .then(function (response) {
-            $scope.likes = response.data.like_count;
-            $scope.flag = true;
+            $scope.comments = response.data.data; // Create a copy to avoid modifying response directly
+            console.log($scope.comments);
+            for (var i = $scope.comments.length - 1; i >= 0; i--) {
+              if ($scope.comments[i].replies) {
+                var newReplies = [];
+                var new_comments = $scope.comments
+                for (var j = 0; j < $scope.comments[i].replies.data.length; j++) {
+                  var reply = $scope.comments.filter((item) => item.id === $scope.comments[i].replies.data[j].id);
+                  newReplies.push(reply[0]);
+                }
+                new_comments[i].replies = newReplies;
+                for (var j = 0; j < $scope.comments[i].replies.length; j++) {
+                  new_comments = new_comments.filter((item) => item.id !== $scope.comments[i].replies[j].id);
+                }
+                $scope.comments = new_comments;
+              }
+            }
           })
           .catch(function (error) {
             console.log("Error fetching Instagram login URL:", error);
@@ -72,7 +86,6 @@ angular.module("comment").component("comment", {
     }
     $scope.imagePage = 0;
     this.analytics = {
-      image: 'assets/images/sample-post.jpg',
       comments: [
         {
           comment_id: '1',

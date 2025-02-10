@@ -35,7 +35,7 @@ class api_controller extends CI_Controller
   public function post()
   {
     $userid = $this->session->userdata('user_id');
-    if (isset($userid)) {
+    if (!isset($userid)) {
       show_error("your are not authorised to access this data");
     }
     $json = file_get_contents('php://input');

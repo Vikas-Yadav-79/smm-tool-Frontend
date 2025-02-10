@@ -5,14 +5,35 @@
   </div>
 
   <ul class="channels">
-    <li class="channel-item" ng-click="connect2('Facebook')">
-      <i class="fab fa-facebook-f"></i> Connect Facebook
+    <li class="channel-item">
+      <span ng-if="$ctrl.connected['Facebook']" ng-click="connect2('Facebook')">
+        <i class="material-icons">photo_camera</i> Connect Facebook
+      </span>
+      <span
+        ng-class="{selectedHandel :   selectedHandel === 'Facebook'} "
+        ng-if="!$ctrl.connected['Facebook']"
+        ng-click="changedata('Facebook')"
+      >
+        <i class="material-icons">photo_camera</i> Connected Facebook
+      </span>
     </li>
-    <li class="channel-item" ng-click="connect2('Instagram')">
-      <i class="fab fa-instagram"></i> Connect Instagram
+    <li class="channel-item">
+      <span
+        ng-if="$ctrl.connected['Instagram']"
+        ng-click="connect2('Instagram')"
+      >
+        <i class="material-icons">photo_camera</i> Connect Instagram
+      </span>
+      <span
+        ng-class="{selectedHandel :   selectedHandel === 'Instagram'} "
+        ng-if="!$ctrl.connected['Instagram']"
+        ng-click="changedata('Instagram')"
+      >
+        <i class="material-icons">photo_camera</i> Connected Instagram
+      </span>
     </li>
     <li class="channel-item" ng-click="connect2(Linkedin)">
-      <i class="fab fa-linkedin-in"></i> Connect LinkedIn
+      <i class="material-icons"></i> Connect LinkedIn
     </li>
   </ul>
 </div>

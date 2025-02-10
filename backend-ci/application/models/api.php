@@ -63,6 +63,48 @@ class api extends CI_Model
             curl_setopt($ch, CURLOPT_POSTFIELDS, $publish_params);
             $publish_response = curl_exec($ch);
             $result2 = json_decode($publish_response, true);
+
+            $platformPostId = $result2['id'];
+            $user_id = $this->session->userdata('user_id');
+            $this->db->select('id'); // Select only the 'id' column
+            $this->db->from('social_accounts'); // Specify the table
+            $this->db->where('user_id', $user_id); // Condition: user_id matches session user_id
+            $this->db->where('platform', 'Instagram'); // Condition: platform is Facebook
+            $query = $this->db->get();
+            // Prepare the data for storing in the database
+
+            // Insert the post content into the database
+
+            if ($query && $query->num_rows() > 0) {
+                // Fetch the social_account_id
+                $result = $query->row(); // Get the first row of the result
+                $social_account_id = $result->id;
+
+                $postContent = [
+                    // Assuming the user is logged in
+                    'user_id' => $user_id,
+                    'social_account_id' => $social_account_id,
+                    'title' => $caption,
+                    'content' => $caption,
+                    'status' => 'published', // You can set it to 'scheduled' or 'draft' if needed
+                    'published_time' => date('Y-m-d H:i:s'),
+                    'platform_post_ids' => $platformPostId, // Store platform post ID
+                ];
+
+
+                $this->db->insert('posts', $postContent);
+                $this->db->select('id');
+                $this->db->from('posts');
+                $this->db->where('platform_post_ids', $platformPostId);
+                $post_id = $this->db->get()->row()->id;
+                $image_url_content = [
+                    'post_id' => $post_id,
+                    'image_url' => $image_url[0],
+                    'media_type' => $media_type[0]
+                ];
+                $this->db->insert('post_images', $image_url_content);
+            }
+
             curl_close($ch);
             if (isset($result2['id'])) {
                 echo json_encode(json_decode($publish_response, true));
@@ -158,6 +200,45 @@ class api extends CI_Model
             $trouble_response = curl_exec($ch);
             show_error($trouble_response);
         }
+        $user_id = $this->session->userdata('user_id');
+        $this->db->select('id'); // Select only the 'id' column
+        $this->db->from('social_accounts'); // Specify the table
+        $this->db->where('user_id', $user_id); // Condition: user_id matches session user_id
+        $this->db->where('platform', 'Instagram'); // Condition: platform is Facebook
+        $query = $this->db->get();
+        // Prepare the data for storing in the database
+
+        // Insert the post content into the database
+
+        if ($query && $query->num_rows() > 0) {
+            // Fetch the social_account_id
+            $result = $query->row(); // Get the first row of the result
+            $social_account_id = $result->id;
+
+            $postContent = [
+                // Assuming the user is logged in
+                'user_id' => $user_id,
+                'social_account_id' => $social_account_id,
+                'title' => $caption,
+                'content' => $caption,
+                'status' => 'published', // You can set it to 'scheduled' or 'draft' if needed
+                'published_time' => date('Y-m-d H:i:s'),
+                'platform_post_ids' => $publish_id, // Store platform post ID
+            ];
+            $this->db->insert('posts', $postContent);
+            $this->db->select('id');
+            $this->db->from('posts');
+            $this->db->where('platform_post_ids', $publish_id);
+            $post_id = $this->db->get()->row()->id;
+            for ($x = 0; $x < count($image_url); $x++) {
+                $image_url_content = [
+                    'post_id' => $post_id,
+                    'image_url' => $image_url[$x],
+                    'media_type' => $media_type[$x]
+                ];
+                $this->db->insert('post_images', $image_url_content);
+            }
+        }
         echo json_encode(json_decode($publish_response, true));
     }
 
@@ -183,15 +264,15 @@ class api extends CI_Model
         if (!isset($access_token)) {
             show_error("you need to login to instagram");
         }
-        $url = "{$this->api_url}{$post_id}/comments?access_token={$access_token}";
-        echo $url;
+
+        $url = "{$this->api_url}{$post_id}/comments?fields=id,text,username,replies,like_count&access_token={$access_token}";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         $response = curl_exec($ch);
         curl_close($ch);
-        echo json_encode(json_decode($response, true));
+        echo $response;
     }
 
     public function replayAction($comment_id, $message)

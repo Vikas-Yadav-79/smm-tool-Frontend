@@ -164,6 +164,7 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
                     .then(function (response) {
                         console.log('Logged in successfully');
                         // Handle the response, such as storing the token or redirecting
+                        $scope.connected['Facebook'] = true;
                         $location.path('/dashboard');
 
                     }, function (error) {
@@ -175,17 +176,31 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         }, { scope: 'pages_manage_posts,pages_read_engagement,pages_manage_engagement,pages_show_list' }); // Request permissions
     };
 
-
     // ohm's sidebar implementation
     $scope.items = [];
     $scope.data = [];
     $scope.selectedTable = "scheduled";
     $scope.flag = false;
     $scope.user_id = localStorage.getItem('user_id');
+    $scope.connected = {
+        Instagram: false,
+        Facebook: false,
+        LinkedIn: false,
+    }
+    $scope.selectedHandle = '';
+    $http.get('http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/checkConnection').then(function (response) {
+        $scope.connectiondata = response.data.connection;
+        $scope.connectiondata.forEach(element => {
+            if (element.account_name !== '' && element.platform !== 'Facebook') {
+                $scope.connected[element.platform] = true;
+            }
+        });
+    }, function (error) {
+
+    });
     $http.get("http://localhost/smm/smm-tool-Frontend/backend-ci/index.php/posts/getposts/" + $scope.user_id)
         .then(function (response) {
             $scope.data = response.data;
-            $scope.flag = true;
             $scope.data.forEach(post => {
                 const dateObj = new Date(post.published_time);
                 post.published_time = dateObj;
@@ -196,8 +211,13 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
 
 
             // filter to inistial selected item 
+            $scope.items = $scope.items.filter((item) => item.platform === $scope.selectedHandle);
+            if ($scope.items.length === 0) {
+                return;
+            }
             $scope.items = $scope.items.filter((item) => item.status === 'scheduled');
             $scope.tableLength = Math.ceil($scope.items.length / 2);
+            $scope.flag = true;
         })
         .catch(function (error) {
             console.error("Error fetching Instagram login URL:", error);
@@ -214,6 +234,10 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
 
     };
 
+    $scope.changeSelectedHandle = (handle) => {
+        $scope.selectedHandle = handle;
+        $scope.changeTabledata($scope.selectedTable);
+    }
     $scope.filterData = (query) => {
         const searchQuery = query.toString().toLowerCase();
         $scope.filteredData = $scope.items.filter(item => {
@@ -246,7 +270,6 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
 
     $scope.isDialogOpen2 = false;
     $scope.clearFilter = function () {
-        console.log('clear filter');
         $scope.changeTabledata($scope.selectedTable);
         $scope.filter = {
             min: 0,
@@ -263,7 +286,6 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
         $scope.filteredItems = [...$scope.items];
         const { min, max, selectedOption, selectedType, startDate, endDate } = $scope.filter;
         if (selectedType !== 'All') {
-            console.log('Selected type:', selectedType);
             $scope.filteredItems = $scope.filteredItems.filter((item) => {
                 const matchesType = selectedType === 'All' || item.type === selectedType;
                 return matchesType;
@@ -300,7 +322,8 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
     };
 
     $scope.changeTabledata = function (type) {
-        let $filtered_data = [...$scope.data]; // Create a copy of the original data
+        $scope.items = $scope.data.filter((item) => item.platform === $scope.selectedHandle);
+        let $filtered_data = [...$scope.items]; // Create a copy of the original data
         $scope.selectedTable = type; // Store the selected type
         if ($scope.selectedTable === 'Published') {
             $filtered_data = $filtered_data.filter((item) => item.status === 'published');
@@ -310,6 +333,11 @@ angular.module('myApp').controller('AuthController', function ($scope, $http, $l
             $filtered_data = $filtered_data.filter((item) => item.status === 'draft');
         }
         $scope.items = $filtered_data; // Update the items displayed in the table 
+        if ($scope.items.length === 0) {
+            $scope.flag = false;
+        } else {
+            $scope.flag = true;
+        }
         $scope.tableLength = Math.ceil($scope.items.length / 2);
     };
     $scope.countImage = 0;

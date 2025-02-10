@@ -57,7 +57,7 @@ class post extends CI_Controller
     $post_platform = [];
     foreach ($posts_with_images as $post) {
       $this->db->select('platform,account_name');
-      $query3 = $this->db->get_where('social_accounts', array('user_id' => $post['social_account_id']));
+      $query3 = $this->db->get_where('social_accounts', array('id' => $post['social_account_id']));
       $result3 = $query3->result_array();
       $temp = $post;
       $temp['platform'] = $result3[0]['platform'];

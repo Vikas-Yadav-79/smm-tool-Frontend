@@ -1,5 +1,10 @@
 <div class="dashboard-container">
-  <sidebar on-connect="connectHendal(action)"></sidebar>
+  <sidebar
+    on-connect="connectHendal(action)"
+    on-apply-filter="changeSelectedHandle(handle)"
+    data="connected"
+    selectedHandel="selectedHandle"
+  ></sidebar>
   <div style="width: -webkit-fill-available">
     <subnavbar
       data="selectedTable"

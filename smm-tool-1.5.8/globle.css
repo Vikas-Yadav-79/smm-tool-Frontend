@@ -280,8 +280,9 @@ th {
 
 .analytics-container {
   display: flex;
-  padding: 20px;
+  border: .8px solid #dbdbdb;
   font-family: Arial, sans-serif;
+  border-radius: 5px;
 }
 
 /* .post-analytics {
@@ -316,17 +317,16 @@ th {
 
 .post-analytics {
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  display: flex;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
-  display: flex;
+  background: white;
   justify-items: center;
   align-items: center;
   max-width: 700px;
   height: 650px;
-  margin: 30px auto;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -350,7 +350,7 @@ th {
 
 .post-img {
   width: 650px;
-  height: 406px;
+  height: 550px;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -452,30 +452,35 @@ th {
 
 .comments-section {
   font-family: Arial, sans-serif;
-  border: 1px solid #ddd;
+  max-width: 600px;
+  border: 1px solid #dbdbdb;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  max-width: 600px;
+  width: 350px;
   height: 650px;
   margin: auto;
-  background-color: #f9f9f9;
+  background-color: white;
 
 }
 
 .comments-title {
   font-size: 1.5em;
   margin-top: 0px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   padding: 20px;
   position: statics;
   color: #333;
-  border-bottom: 2px solid #007bff;
+  border-bottom: 1px solid #dbdbdb;
   padding-bottom: 5px;
 }
 
 .comment {
+  display: flex;
+  gap: 8px;
+
+
   /* margin-bottom: 20px; */
   padding-bottom: 15px;
 
@@ -486,21 +491,20 @@ th {
 }
 
 .author {
-  font-weight: bold;
-  color: #007bff;
+  font-weight: 600;
+  color: black;
 }
 
 .text {
-  color: #555;
+  color: black;
 }
 
 .reply-section {
   display: flex;
   gap: 10px;
-  padding: 0px 0 0 10px;
   flex-direction: column;
   align-items: flex-start;
-  /* margin-top: 10px; */
+  margin-top: 8px;
 }
 
 .reply-input {
@@ -524,9 +528,10 @@ th {
 
 .reply-button {
   /* padding: 8px 16px; */
-  font-size: 1em;
+  font-size: 12px;
   /* color: white; */
   background-color: transparent;
+  color: rgb(115, 115, 115);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -559,7 +564,7 @@ th {
 
 .reply-author {
   font-weight: bold;
-  color: #28a745;
+  color: black;
 }
 
 .reply-text {
@@ -871,4 +876,8 @@ select {
 
 #filter-li2::marker {
   content: none;
+}
+
+.selectedHandel {
+  background-color: red;
 }
